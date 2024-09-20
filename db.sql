@@ -10,17 +10,37 @@
 CREATE DATABASE IF NOT EXISTS `inv-web` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `inv-web`;
 
+CREATE TABLE IF NOT EXISTS `default_product` (
+  `ID_PRODUCT_DEFAULT` char(36) NOT NULL,
+  `NAME_PRODUCT` varchar(255) DEFAULT NULL,
+  `DESCRIPTION_PRODUCT` text,
+  `IMAGE_PRODUCT` varchar(255) DEFAULT NULL,
+  `BARCODE` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID_PRODUCT_DEFAULT`),
+  UNIQUE KEY `BARCODE` (`BARCODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DELETE FROM `default_product`;
+INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
+	('673ba806-0030-401d-8ad4-2dc35178eeed', 'Cabernet Sauvignon', '', 'https://images.openfoodfacts.org/images/products/780/432/030/3178/front_es.32.400.jpg', '7804320303178');
+INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
+	('8ca941aa-2113-4b22-8097-911f036160f3', 'Nutella', NULL, 'https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.633.400.jpg', '3017620422003');
+INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
+	('ee1d38ab-1c2c-47af-8f69-9fa889dcf26f', 'Jacobs Krönung Gold Instant', '', 'https://images.openfoodfacts.org/images/products/400/050/805/0008/front_de.20.400.jpg', '4000508050008');
+INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
+	('f89beeb3-6710-4c3b-bf9b-d4e994284f51', 'Néctar de naranja', NULL, 'https://images.openfoodfacts.org/images/products/780/162/001/1604/front_es.22.400.jpg', '7801620011604');
+
 CREATE TABLE IF NOT EXISTS `users` (
-  `ID_USER` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `password` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `ID_USER` varchar(36) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(400) NOT NULL,
+  PRIMARY KEY (`ID_USER`),
+  UNIQUE KEY `username_unique` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `users`;
 INSERT INTO `users` (`ID_USER`, `username`, `password`) VALUES
-	('c74e4fd0-445a-436a-9545-8dc40c4d2299', 'ejemplo@example.com', '$2b$10$/zd/5vOPI2xl.BfvtL4gyOInjjPy8dWSF2CaMXLCQx1yAVylR/YyO');
-INSERT INTO `users` (`ID_USER`, `username`, `password`) VALUES
-	('a599d09f-b6be-4531-91d1-c7e48629a95c', 'ejemplo2@example.com', '$2b$10$2bDVa6O0FVTKDYhR2Kjye.XqiVdKwco7QEIND4WIGpwUQphZLB5r.');
+	('607347dc-f8fb-4577-9ee5-aaefc34c31ed', 'ejemplo@example.com', '$2b$10$1GI56mmsAmJ4Vs5X.41j7.Qyt7Skyi2PMkEsOLZ7/YXw54k9Oto8K');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
