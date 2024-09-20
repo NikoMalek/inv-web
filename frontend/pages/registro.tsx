@@ -3,14 +3,21 @@ import RegistroProductos from "../components/registroproducto";
 
 
 interface Producto {
-  name: string;
-  barcode: string;
+  nombre: string;
+  codigoBarras: string;
   cantidad: number;
-  image?: string;
+  imagen?: string;
 }
 
 
-const App: React.FC = () => {
+
+interface UserData {
+  userData: {
+    id: string;
+  };
+}
+
+const App: React.FC<UserData> = ({ userData }) => {
   const [productos, setProductos] = useState<Producto[]>([]);
 
   const guardarProducto = (producto: Producto) => {
@@ -55,7 +62,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className=" h-screen w-screen  bg-gray-50 dark:bg-gray-900">
+    <div className=" min-h-screen w-screen  bg-gray-50 dark:bg-gray-900">
       
       <RegistroProductos
         productos={productos}
@@ -63,6 +70,7 @@ const App: React.FC = () => {
         buscarProductoLocal={buscarProductoLocal}
         guardarProductoLocal={guardarProductoLocal}
       />
+      {/* <h3 className="text-black">Hola señor de ID: {userData.id}</h3> */}
     </div>
   );
 };
