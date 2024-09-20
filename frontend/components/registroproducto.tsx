@@ -70,7 +70,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
       console.log("Captura desde cámara: ", imageSrc);
 
       // Ejemplo de código de barras detectado
-      const codigoBarrasDetectado = "737628064502";
+      const codigoBarrasDetectado = "7801620011604";
       setCodigoBarras(codigoBarrasDetectado);
 
       // Buscar el producto con el código detectado
@@ -117,7 +117,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
           id="nombre"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 text-black"
           placeholder="Ingrese el nombre del producto"
         />
       </div>
@@ -132,7 +132,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
             id="codigoBarras"
             value={codigoBarras}
             onChange={(e) => setCodigoBarras(e.target.value)}
-            className="flex-1 p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+            className="flex-1 p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 text-black"
             placeholder="Ingrese o escanee el código de barras"
           />
           <button
@@ -180,7 +180,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
           id="cantidad"
           value={cantidad}
           onChange={(e) => setCantidad(Number(e.target.value))}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 text-black"
         />
       </div>
 

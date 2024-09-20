@@ -5,7 +5,6 @@ import { PORT, SECRET_JWT_KEY, FRONTEND_URL } from './config.js'
 import { UserDB } from './services/user-db.js'
 import cors from 'cors';
 import sequelize from './db.js';
-import './models/User.js';
 import productRouter from './routes/productRoute.js';
 
 

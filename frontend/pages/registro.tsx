@@ -3,10 +3,10 @@ import RegistroProductos from "../components/registroproducto";
 
 
 interface Producto {
-  nombre: string;
-  codigoBarras: string;
+  name: string;
+  barcode: string;
   cantidad: number;
-  imagen?: string;
+  image?: string;
 }
 
 
@@ -55,7 +55,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className=" h-screen w-screen  bg-gray-50 dark:bg-gray-900">
       
       <RegistroProductos
         productos={productos}

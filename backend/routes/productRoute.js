@@ -1,20 +1,31 @@
 import express from 'express';
+import { ProductDB } from '../services/products-db.js';
+
+
 const router = express.Router();
 
 // Simular guardar productos en una base de datos
 
-router.post('/', (req, res) => {
-  const {nombre , cogidoBarras, cantidad, imagen} = req.body;
-  console.log(req.body);
-  res.status(201).json({ message: 'Producto guardado con éxito', producto: req.body });
+router.post('/', async (req, res) => {
+  try {
+    const { nombre, description, imagen, codigoBarras } = req.body;
+    console.log(req.body);
+    const id = await ProductDB.create({ nombre, description, imagen, codigoBarras });
+    res.json({ id });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 
 
-// Se puede prorbar en postman enviando un GET a http://localhost:3000/productos/123456789
-router.get('/:codigoBarras', (req, res) => {
-  const { codigoBarras } = req.params;
-  console.log(req.params);
-  res.json({ codigoBarras });
+router.get('/:codigoBarras', async (req, res) => {
+  try {
+    const { codigoBarras } = req.params;
+    const producto = await ProductDB.get({ barcode: codigoBarras });
+    res.json(producto);
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
 });
 
 
