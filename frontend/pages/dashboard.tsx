@@ -43,6 +43,12 @@ export default function Welcome({ userData }: { userData: UserData }) {
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl dark:border-gray-700 text-center">
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 dark:bg-gray-800 dark:border-gray-600">
+          <button
+            onClick={() => router.push('/registro')}
+            className="p-2 bg-blue-500 text-white rounded-lg"
+          >
+            Escanear código de barras
+          </button>
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
             Bienvenido{userData.username ? `, ${userData.username}` : ''}
           </h3>

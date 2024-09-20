@@ -2,10 +2,11 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
 import { PORT, SECRET_JWT_KEY, FRONTEND_URL } from './config.js'
-import { UserDB } from './user-db.js'
+import { UserDB } from './services/user-db.js'
 import cors from 'cors';
 import sequelize from './db.js';
 import './models/User.js';
+import productRouter from './routes/productRoute.js';
 
 
 
@@ -87,6 +88,9 @@ app.get('/protected', (req, res) => {
     username: user.username
   });
 })
+
+app.use('/productos', productRouter);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)

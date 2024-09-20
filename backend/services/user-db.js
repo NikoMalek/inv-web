@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
-import User from './models/User.js';
+import User from '../models/User.js';
 // import DBLocal from 'db-local';
 
 
