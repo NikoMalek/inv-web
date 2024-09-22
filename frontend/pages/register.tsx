@@ -21,7 +21,13 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
 
 
   async function register(formData: FormData) {
-    const username = formData.get('email') as string;
+    const nombre = formData.get('firstName') as string;
+    const apellido = formData.get('lastName') as string;
+    const rut = formData.get('rut') as string;
+    const telefono = formData.get('phone') as string;
+    const nombre_empresa = formData.get('company') as string;
+    const direccion = formData.get('address') as string;
+    const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
@@ -29,7 +35,7 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ nombre, apellido, rut, telefono, nombre_empresa, direccion, email, password }),
       });
 
       if (!response.ok) {
@@ -85,7 +91,7 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
             Crea una cuenta con tu correo electrónico y contraseña
           </p>
         </div>
-        <Form action={register}>
+        <Form action={register} isRegister>
           <SubmitButton>Regístrate</SubmitButton>
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
             {'¿Ya tienes una cuenta? '}
