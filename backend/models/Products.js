@@ -1,30 +1,30 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db.js";
 
-const Default_Product = sequelize.define("Default_Product", {
-  ID_PRODUCT_DEFAULT: {
+const Producto_Base = sequelize.define("Producto_Base", {
+  ID_PRODUCTO_BASE: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
-  NAME_PRODUCT: {
+  NOMBRE_PRODUCTO: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  DESCRIPTION_PRODUCT: {
+  DESCRIPCION_PRODUCTO: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  IMAGE_PRODUCT: {
+  IMAGEN_PRODUCTO: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  BARCODE: {
+  CODIGO_BARRA: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 }, {
-    tableName: "default_product",
+    tableName: "producto_base",
     timestamps: false,
   });
 
-export default Default_Product;
+export default Producto_Base;

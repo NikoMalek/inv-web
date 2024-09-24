@@ -21,7 +21,7 @@ export default function Login({ isDarkMode, toggleDarkMode }: LoginProps) {
 
   
   async function login(formData: FormData) {
-    const username = formData.get('email') as string;
+    const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
 
@@ -32,7 +32,7 @@ export default function Login({ isDarkMode, toggleDarkMode }: LoginProps) {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {

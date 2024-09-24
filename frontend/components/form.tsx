@@ -13,18 +13,28 @@ export function Form({
   const [rut, setRut] = useState<string>('');
   const [rutError, setRutError] = useState<string>('');
 
-  // const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setRut(e.target.value);
-  // };
+  const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.toUpperCase();
+    value = value.replace(/[^0-9K]/g, '');
+  
+    if (value.includes('K') && value.indexOf('K') !== value.length - 1) {
+      value = value.replace(/K/g, '');
+    }
+  
+    const formattedRut = RUT.format(value, false, true);
+    setRut(formattedRut);
+
+  };
 
   const handleRutBlur = () => {
-    const isValid = RUT.validate(rut);
-    setRutError(isValid ? '' : 'Formato de RUT inválido');
-    if (isValid) {
-      console.log('RUT:', RUT.format(rut));
-      setRut(RUT.format(rut,false,true));
+    if (rut) {
+      const isValid = RUT.validate(rut);
+      setRutError(isValid ? '' : 'Formato de RUT inválido');
+      if (isValid) {
+        console.log('RUT:', RUT.format(rut));
+        setRut(RUT.format(rut, false, true));
+      }
     }
-
   };
   return (
     <form
@@ -70,17 +80,18 @@ export function Form({
         <div>
         <label
           htmlFor="rut"
-          className="block text-xs text-gray-600 dark:text-gray-400 uppercase"
+          className="block text-xs text-gray-600 dark:text-gray-400"
         >
-          Rut
+          RUT (Sin puntos ni guión)
         </label>
         <input
           id="rut"
           name="rut"
           type="text"
-          placeholder="12345678-9"
+          placeholder="123456789"
           value={rut}
-          onChange={(e) => setRut(e.target.value)}
+          onChange={handleRutChange}
+          // onChange={(e) => setRut(e.target.value)}
           onBlur={handleRutBlur}
           required
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 dark:border-gray-700 px-3 py-2 placeholder-gray-400 dark:placeholder-gray-500 shadow-sm focus:border-black dark:focus:border-white focus:outline-none focus:ring-black dark:focus:ring-white sm:text-sm text-black"
@@ -96,14 +107,25 @@ export function Form({
           >
             Teléfono
           </label>
-          <input
-            id="phone"
-            name="phone"
-            type="number"
-            placeholder="12345678"
-            required
-            className="mt-1 block w-full appearance-none rounded-md border border-gray-300 dark:border-gray-700 px-3 py-2 placeholder-gray-400 dark:placeholder-gray-500 shadow-sm focus:border-black dark:focus:border-white focus:outline-none focus:ring-black dark:focus:ring-white sm:text-sm text-black"
-          />
+          <div className="mt-1 relative">
+            <input
+              id="phone"
+              name="phone"
+              type="text"
+              placeholder="912345678"
+              required
+              pattern="\d*"
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                input.value = input.value.replace(/\D/g, '').slice(0,9);
+              }}
+              inputMode="numeric" 
+              className="block w-full pl-12 pr-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm text-black"
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <span className="text-gray-900 sm:text-sm font-semibold text-lg">+56</span>
+            </div>
+          </div>
         </div>
         {/* Datos empresa */}
         <div>

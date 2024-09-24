@@ -6,6 +6,8 @@ import { UserDB } from './services/user-db.js'
 import cors from 'cors';
 import sequelize from './db.js';
 import productRouter from './routes/productRoute.js';
+import invetarioRouter from './routes/inventarioRoute.js';
+import { errorMessages } from './errorvalidation.js';
 
 
 
@@ -36,11 +38,10 @@ app.get('/', (req, res) => {
 
 
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body
-  
+  const { email, password } = req.body
   try {
-    const user = await UserDB.login({ username, password })
-    const token = jwt.sign({ id: user.ID_USER, username: user.username },SECRET_JWT_KEY, { 
+    const user = await UserDB.login({ email, password })
+    const token = jwt.sign({ id: user.ID_USER, username: user.email },SECRET_JWT_KEY, { 
       expiresIn: '1h' 
     })
     res
@@ -52,20 +53,27 @@ app.post('/login', async (req, res) => {
       })
       .send({ user, token })
   } catch (error) {
-    res.status(401).send(error.message)
+    console.log(error.message)
+    const safeErrorMessages = Object.values(errorMessages);
+    const errorMessage = safeErrorMessages.includes(error.message) ? error.message : 'Error en el servidor';
+    console.log(errorMessage)
+    res.status(401).send(errorMessage)
   }
 })
 
 
 
 app.post('/register', async (req, res) => {
-  const { username, password } = req.body
+  const { nombre, apellido, rut, telefono, nombre_empresa, direccion, email, password } = req.body
 
   try{
-    const id = await UserDB.create({ username, password })
+    const id = await UserDB.create({ nombre, apellido, rut, telefono, nombre_empresa, direccion, email, password })
     res.send({ id })
   } catch (error) {
-    res.status(400).send(error.message)
+    console.log(error.message)
+    const safeErrorMessages = Object.values(errorMessages);
+    const errorMessage = safeErrorMessages.includes(error.message) ? error.message : 'Error en el servidor';
+    res.status(400).send(errorMessage)
   }
 })
 app.get('/logout', (req, res) => {
@@ -89,6 +97,8 @@ app.get('/protected', (req, res) => {
 })
 
 app.use('/productos', productRouter);
+
+app.use('/inventario', invetarioRouter);
 
 
 app.listen(PORT, () => {

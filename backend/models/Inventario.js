@@ -1,28 +1,13 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db.js';
 
-const User = sequelize.define('User', {
-  ID_USER: {
+
+const Inventario = sequelize.define('Inventario', {
+  ID_INVENTARIO: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
-  nombre: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  apellido: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  rut : {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  telefono : {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email : {
+  ID_PRODUCTO_BASE: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -30,13 +15,26 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  password: {
+  precio: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  cantidad: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ultima_actualizacion: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ID_REPONEDOR: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 }, {
-  tableName: 'users', // Especifica el nombre de la tabla aquí
-  timestamps: false, // Deshabilita la creación de las columnas `createdAt` y `updatedAt`
-});
+  tableName: 'inventario', // Especifica el nombre de la tabla aquí
+  timestamps: false, // Deshabilita la creación de las columnas `createdAt` y `updatedAt`  
+  });
 
-export default User;
+
+export default Inventario;

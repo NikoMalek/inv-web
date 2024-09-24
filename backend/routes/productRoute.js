@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { nombre, description, imagen, codigoBarras } = req.body;
+    const { nombre, description, imagen, codigoBarras, ID_EMPRESA, precio, cantidad, ultima_actualizacion, ID_REPONEDOR } = req.body;
     console.log(req.body);
-    const id = await ProductDB.create({ nombre, description, imagen, codigoBarras });
+    const id = await ProductDB.create({ nombre, description, imagen, codigoBarras, ID_EMPRESA, precio, cantidad, ultima_actualizacion, ID_REPONEDOR });
     res.json({ id });
   } catch (error) {
     res.status(400).send(error.message);
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 router.get('/:codigoBarras', async (req, res) => {
   try {
     const { codigoBarras } = req.params;
-    const producto = await ProductDB.get({ barcode: codigoBarras });
+    const producto = await ProductDB.get({ CODIGO_BARRA: codigoBarras });
     res.json(producto);
   } catch (error) {
     res.status(404).send(error.message);

@@ -1,49 +1,69 @@
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+create table if not exists empresas
+(
+    ID_EMPRESA     varchar(36)  not null
+        primary key,
+    nombre_empresa varchar(255) not null,
+    direccion      varchar(255) null
+);
 
-CREATE DATABASE IF NOT EXISTS `inv-web` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `inv-web`;
+create table if not exists producto_base
+(
+    ID_PRODUCTO_BASE     char(36)     not null
+        primary key,
+    NOMBRE_PRODUCTO      varchar(255) null,
+    DESCRIPCION_PRODUCTO text         null,
+    IMAGEN_PRODUCTO      varchar(255) null,
+    CODIGO_BARRA         varchar(50)  null,
+    constraint CODIGO_BARRAS
+        unique (CODIGO_BARRA)
+);
 
-CREATE TABLE IF NOT EXISTS `default_product` (
-  `ID_PRODUCT_DEFAULT` char(36) NOT NULL,
-  `NAME_PRODUCT` varchar(255) DEFAULT NULL,
-  `DESCRIPTION_PRODUCT` text,
-  `IMAGE_PRODUCT` varchar(255) DEFAULT NULL,
-  `BARCODE` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID_PRODUCT_DEFAULT`),
-  UNIQUE KEY `BARCODE` (`BARCODE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create table if not exists users
+(
+    ID_USER    varchar(36)  not null
+        primary key,
+    nombre     varchar(255) not null,
+    apellido   varchar(100) not null,
+    rut        varchar(12)  not null,
+    telefono   varchar(15)  not null,
+    email      varchar(100) not null,
+    ID_EMPRESA varchar(36)  not null,
+    password   varchar(255) not null,
+    constraint email
+        unique (email),
+    constraint rut
+        unique (rut),
+    constraint users_ibfk_1
+        foreign key (ID_EMPRESA) references empresas (ID_EMPRESA)
+);
 
-DELETE FROM `default_product`;
-INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
-	('673ba806-0030-401d-8ad4-2dc35178eeed', 'Cabernet Sauvignon', '', 'https://images.openfoodfacts.org/images/products/780/432/030/3178/front_es.32.400.jpg', '7804320303178');
-INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
-	('8ca941aa-2113-4b22-8097-911f036160f3', 'Nutella', NULL, 'https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.633.400.jpg', '3017620422003');
-INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
-	('ee1d38ab-1c2c-47af-8f69-9fa889dcf26f', 'Jacobs Krönung Gold Instant', '', 'https://images.openfoodfacts.org/images/products/400/050/805/0008/front_de.20.400.jpg', '4000508050008');
-INSERT INTO `default_product` (`ID_PRODUCT_DEFAULT`, `NAME_PRODUCT`, `DESCRIPTION_PRODUCT`, `IMAGE_PRODUCT`, `BARCODE`) VALUES
-	('f89beeb3-6710-4c3b-bf9b-d4e994284f51', 'Néctar de naranja', NULL, 'https://images.openfoodfacts.org/images/products/780/162/001/1604/front_es.22.400.jpg', '7801620011604');
+create table if not exists inventario
+(
+    ID_INVENTARIO        varchar(36) not null
+        primary key,
+    ID_PRODUCTO_BASE     varchar(36) null,
+    ID_EMPRESA           varchar(36) null,
+    precio               int         null,
+    cantidad             int         null,
+    ultima_actualizacion text        null,
+    ID_REPONEDOR         varchar(36) null,
+    constraint inventario_ibfk_1
+        foreign key (ID_PRODUCTO_BASE) references producto_base (ID_PRODUCTO_BASE),
+    constraint inventario_ibfk_2
+        foreign key (ID_EMPRESA) references empresas (ID_EMPRESA),
+    constraint inventario_ibfk_3
+        foreign key (ID_REPONEDOR) references users (ID_USER)
+);
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `ID_USER` varchar(36) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `password` varchar(400) NOT NULL,
-  PRIMARY KEY (`ID_USER`),
-  UNIQUE KEY `username_unique` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create index ID_EMPRESA
+    on inventario (ID_EMPRESA);
 
-DELETE FROM `users`;
-INSERT INTO `users` (`ID_USER`, `username`, `password`) VALUES
-	('607347dc-f8fb-4577-9ee5-aaefc34c31ed', 'ejemplo@example.com', '$2b$10$1GI56mmsAmJ4Vs5X.41j7.Qyt7Skyi2PMkEsOLZ7/YXw54k9Oto8K');
+create index ID_PRODUCTO_BASE
+    on inventario (ID_PRODUCTO_BASE);
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+create index ID_REPONEDOR
+    on inventario (ID_REPONEDOR);
+
+create index ID_EMPRESA
+    on users (ID_EMPRESA);
+
