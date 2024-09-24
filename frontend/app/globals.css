@@ -3,14 +3,17 @@
 @tailwind utilities;
 
 :root {
+  /* --background: #ffffff; */
   --background: #ffffff;
+  /* --foreground: #171717; */
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    /* --foreground: #ededed; */
+    --foreground: #ffffff;
   }
 }
 
@@ -90,3 +93,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.swal2-popup {
+  background-color: white;
+  color: black;
+}
+
+.dark .swal2-popup {
+  background-color: #1f2937; /* gray-800 */
+  color: white;
+}
+
+
