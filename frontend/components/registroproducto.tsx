@@ -71,7 +71,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
       console.log("Captura desde cámara: ", imageSrc);
 
       // Ejemplo de código de barras detectado
-      const codigoBarrasDetectado = "3017620422003";
+      const codigoBarrasDetectado = "3046920022651";
       setCodigoBarras(codigoBarrasDetectado);
 
       // Buscar el producto con el código detectado
