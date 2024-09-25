@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import type { AppProps } from 'next/app'
-import { useDarkMode } from '../lib/useDarkMode'
-import '../app/globals.css'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import type { AppProps } from 'next/app';
+import { useDarkMode } from '../lib/useDarkMode';
+import '../app/globals.css';
+
+import Navbar from '../components/Navbar';
 
 const publicRoutes = ['/', '/login', '/register'];
 
@@ -11,7 +13,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<{ id: string, username: string } | null>(null);
   const router = useRouter();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode } = useDarkMode(); // Hook para modo oscuro
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -68,7 +70,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <div className={isDarkMode ? 'dark' : ''}>
-      <Component {...pageProps} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} userData={userData}/>
+      {!publicRoutes.includes(router.pathname) && <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />}  {/* Navbar condicional con props */}
+      <Component {...pageProps} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} userData={userData} />
     </div>
   );
 };

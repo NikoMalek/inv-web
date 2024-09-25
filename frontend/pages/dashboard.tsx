@@ -26,7 +26,7 @@ export default function Welcome({ userData }: { userData: UserData }) {
         throw new Error('No se pudo cerrar sesión');
       }
     } catch (error) {
-      console.error('Error logging out:', error.message);
+      console.error('Error logging out:', (error as Error).message);
       MySwal.fire({
         icon: 'error',
         title: 'Error',
