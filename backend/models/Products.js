@@ -2,23 +2,23 @@ import { DataTypes } from "sequelize";
 import sequelize from "../db.js";
 
 const Producto_Base = sequelize.define("Producto_Base", {
-  ID_PRODUCTO_BASE: {
+  id_producto_base: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
-  NOMBRE_PRODUCTO: {
+  nombre_producto: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  DESCRIPCION_PRODUCTO: {
+  descripcion_producto: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  IMAGEN_PRODUCTO: {
+  imagen_producto: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  CODIGO_BARRA: {
+  codigo_barra: {
     type: DataTypes.STRING,
     allowNull: false,
   },

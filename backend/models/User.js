@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../db.js';
 
 const User = sequelize.define('User', {
-  ID_USER: {
+  id_user: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
@@ -26,7 +26,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  ID_EMPRESA: {
+  id_empresa: {
     type: DataTypes.STRING,
     allowNull: false,
   },

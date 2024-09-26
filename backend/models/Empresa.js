@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../db.js';
 
 const Empresa = sequelize.define('Empresa', {
-  ID_EMPRESA: {
+  id_empresa: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
