@@ -47,9 +47,9 @@ export default function Login({ isDarkMode, toggleDarkMode }: LoginProps) {
     } catch (error) {
       console.error('Error logging in:', error);
       const errorMessage = 
-      (error.message !== 'El correo electronico no existe' && error.message !== 'Contraseña Incorrecta') 
+      (error instanceof Error && error.message !== 'El correo electronico no existe' && error.message !== 'Contraseña Incorrecta') 
           ? 'Error de conexión con el servidor' 
-          : error.message;
+          : (error as Error).message;
       console.log(error);
       MySwal.fire({
         icon: "error",
