@@ -86,7 +86,7 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
         {isMenuOpen && (
           <div className="md:hidden bg-blue-700 dark:bg-gray-800 p-4 space-y-2">
             {isLoggedIn ? (
-              <Link href="/logout" className="flex items-center block text-white hover:text-gray-300 dark:hover:text-gray-400">
+              <Link href="/logout" className="flex items-center text-white hover:text-gray-300 dark:hover:text-gray-400">
                 <FaSignOutAlt className="mr-1" />
                 <span className="font-medium">Cerrar Sesión</span>
               </Link>
