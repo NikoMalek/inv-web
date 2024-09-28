@@ -36,6 +36,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const [usandoCamara, setUsandoCamara] = useState<boolean>(false);
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [activeTab, setActiveTab] = useState('add')
 
   const buscarProductoPorCodigo = async (codigo: string) => {
     try {
@@ -92,6 +93,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
       onGuardarProducto(nuevoProducto);
       limpiarFormulario();
     } else {
+      console.log("Formulario inválido");
       formRef.current?.reportValidity();
     }
   };
@@ -105,178 +107,180 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-        Registro de Productos
-      </h2>
+    <div className="min-h-screen p-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+      <div className="container mx-auto max-w-4xl">
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
+          <div className="flex flex-row items-center justify-between">
+            <h1 className="text-3xl font-bold">Sistema de Inventario</h1>
+          </div>
+        </div>
 
-      <form ref={formRef} onSubmit={guardarProducto} noValidate>
-        <div className="grid grid-cols-1 gap-6 mb-4 md:grid-cols-2">
-          <div>
-            <label
-              htmlFor="nombre"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+        <div className="space-y-4">
+          <div className="flex border-b border-gray-200">
+            <button
+              className={`py-2 px-4 ${activeTab === 'add' ? 'border-b-2 border-blue-500' : ''}`}
+              onClick={() => setActiveTab('add')}
             >
-              Nombre del Producto
-            </label>
-            <input
-              type="text"
-              id="nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              className="mt-1 block w-full p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-              placeholder="Ingrese el nombre del producto"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="codigoBarras"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              📦 Agregar Producto
+            </button>
+            <button
+              className={`py-2 px-4 ${activeTab === 'list' ? 'border-b-2 border-blue-500' : ''}`}
+              onClick={() => setActiveTab('list')}
             >
-              Código de Barras
-            </label>
-            <div className="flex items-center">
-              <input
-                type="text"
-                id="codigoBarras"
-                value={codigoBarras}
-                onChange={(e) => setCodigoBarras(e.target.value)}
-                className="flex-1 p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-                placeholder="Ingrese o escanee el código de barras"
-                required
-              />
-              <button
-                type="button"
-                className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
-                onClick={() => setUsandoCamara(!usandoCamara)}
-              >
-                {usandoCamara ? "Cerrar Cámara" : "Escanear Código"}
-              </button>
+              📋 Lista de Productos
+            </button>
+          </div>
+
+          {activeTab === 'add' && (
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+              <h2 className="text-2xl font-bold mb-4">Agregar Nuevo Producto</h2>
+              <form ref={formRef} onSubmit={guardarProducto} noValidate>
+                <div className="grid grid-cols-1 gap-6 mb-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label htmlFor="nombre" className="block text-sm font-medium">Nombre del producto</label>
+                    <input
+                      id="nombre"
+                      name="nombre"
+                      type="text"
+                      placeholder="Ej: Camiseta de algodón"
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md dark:text-gray-900"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="codigoBarras" className="block text-sm font-medium">Código de barras</label>
+                    <div className="flex">
+                      <input
+                        id="codigoBarras"
+                        name="codigoBarras"
+                        type="text"
+                        placeholder="Escanear o ingresar código"
+                        value={codigoBarras}
+                        onChange={(e) => setCodigoBarras(e.target.value)}
+                        className="flex-grow p-2 border border-gray-300 rounded-l-md dark:text-gray-900"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setUsandoCamara(!usandoCamara)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
+                      >
+                        📷
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="precio" className="block text-sm font-medium">Precio</label>
+                    <input
+                      id="precio"
+                      name="precio"
+                      type="text"
+                      placeholder="Ej: 19.99"
+                      value={precio}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
+                        if (value.length > 9) {
+                          value = value.slice(0, 9); // Limita a 9 dígitos
+                        }
+                        setPrecio(value ? Number(value) : 0); // Permite borrar todos los caracteres
+                      }}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="cantidad" className="block text-sm font-medium">Cantidad</label>
+                    <input
+                      id="cantidad"
+                      name="cantidad"
+                      type="number"
+                      placeholder="Ej: 100"
+                      value={cantidad}
+                      onChange={(e) => setCantidad(Number(e.target.value))}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
+                </div>
+                {usandoCamara && (
+                  <div className="mt-6 space-y-4 col-span-2">
+                  <div className="flex space-x-4">
+                    <Webcam
+                      ref={webcamRef}
+                      screenshotFormat="image/jpeg"
+                      className="w-1/2 h-64 border rounded-md shadow-md"
+                    />
+                    {imagen && (
+                      <img src={imagen} alt="Producto" className="w-1/2 h-64 object-contain rounded-md shadow-md ml-4" />
+                    )}
+                  </div>
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={capturarCodigoDesdeCamara}
+                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                      >
+                        Capturar Código
+                      </button>
+                      <button
+                        type="button"
+                        onClick={capturarImagen}
+                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                      >
+                        Capturar Imagen
+                      </button>
+                    </div>
+                  </div>
+                )}
+                <div className="mt-6 space-y-4 col-span-2">
+                  <div className="flex justify-between items-center">
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                    >
+                      💾 Guardar Producto
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </div>
-        </div>
+          )}
 
-        {usandoCamara && (
-          <div className="mb-4">
-            <Webcam
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              className="w-full h-64 border rounded-md shadow-md"
-            />
-            <div className="flex space-x-2 mt-2">
-              <button
-                type="button"
-                className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700"
-                onClick={capturarCodigoDesdeCamara}
-              >
-                Capturar Código
-              </button>
-              <button
-                type="button"
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                onClick={capturarImagen}
-              >
-                Capturar Imagen
-              </button>
+          {activeTab === 'list' && (
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+              <h2 className="text-2xl font-bold mb-4">Lista de Productos</h2>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Imagen</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Código de Barras</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Precio</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cantidad</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {productos.map((producto) => (
+                      <tr key={producto.codigoBarras}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <img src={producto.imagen} alt={producto.nombre} className="w-20 h-20 object-contain rounded-md" />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">{producto.nombre}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{producto.codigoBarras}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{producto.precio}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{producto.cantidad}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        )}
-
-        {imagen && (
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-              Imagen del Producto
-            </label>
-            <img
-              src={imagen}
-              alt="Imagen del Producto"
-              className="w-full h-64 border rounded-md shadow-md object-cover"
-            />
-          </div>
-        )}
-
-
-
-
-
-        <div className="mb-4">
-          <label
-            htmlFor="precio"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-          >
-            Precio
-          </label>
-          <input
-            type="number"
-            id="precio"
-            value={precio}
-            onChange={(e) => {
-              const value = e.target.value.slice(0, 9); // Limita a 9 dígitos
-              setPrecio(Number(value));
-            }}
-            maxLength={9}
-            className="mt-1 block w-full p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-          />
+          )}
         </div>
-
-
-
-
-        <div className="mb-4">
-          <label
-            htmlFor="cantidad"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-          >
-            Cantidad
-          </label>
-          <input
-            type="number"
-            id="cantidad"
-            value={cantidad}
-            onChange={(e) => setCantidad(Number(e.target.value))}
-            className="mt-1 block w-full p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700"
-        >
-          Guardar Producto
-        </button>
-      </form>
-
-      <hr className="my-6 border-gray-300 dark:border-gray-600" />
-
-      <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-        Lista de Productos
-      </h3>
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead>
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Nombre
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Código de Barras
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {productos.map((producto, index) => (
-            <tr key={index}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                {producto.nombre}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                {producto.codigoBarras}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      </div>
     </div>
   );
 };
