@@ -124,7 +124,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
               id="nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+              className="mt-1 block w-full p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
               placeholder="Ingrese el nombre del producto"
               required
             />
@@ -143,7 +143,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                 id="codigoBarras"
                 value={codigoBarras}
                 onChange={(e) => setCodigoBarras(e.target.value)}
-                className="flex-1 p-3 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+                className="flex-1 p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
                 placeholder="Ingrese o escanee el código de barras"
                 required
               />
@@ -217,7 +217,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
               setPrecio(Number(value));
             }}
             maxLength={9}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+            className="mt-1 block w-full p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
           />
         </div>
 
@@ -236,7 +236,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
             id="cantidad"
             value={cantidad}
             onChange={(e) => setCantidad(Number(e.target.value))}
-            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+            className="mt-1 block w-full p-3 border border-gray-300 text-gray-800 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
           />
         </div>
 
