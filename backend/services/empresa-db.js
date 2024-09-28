@@ -21,4 +21,11 @@ export class EmpresaDB {
 
     return id_empresa;
   }
+  static async getEmpresa({id_empresa}) {
+    if (!id_empresa) {
+      throw new Error('El id_empresa es requerido');
+    }
+    const empresas = await Empresa.findOne({ where: { id_empresa } });
+    return empresas;
+  }
 }

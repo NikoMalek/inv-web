@@ -10,20 +10,18 @@ import NavbarSidebar from '../components/NavbarSidebar';
 const publicRoutes = ['/', '/login', '/register'];
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState<{ id: string; username: string } | null>(null);
+  const [userData, setUserData] = useState<{ id: string; nombre: string; idEmpresa: string; nombre_empresa: string } | null>(null);
   const router = useRouter();
   const { isDarkMode, toggleDarkMode } = useDarkMode(); // Hook para modo oscuro
 
-  useEffect(() => {
+  
     const checkAuth = async () => {
       try {
-        if (publicRoutes.includes(router.pathname)) {
-          setIsAuthenticated(null);
-          setIsLoading(false);
-          return;
-        }
+        // if (publicRoutes.includes(router.pathname)) {
+        //   setIsLoading(false);
+        // }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/protected`, {
           credentials: 'include',
@@ -32,7 +30,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         if (response.status === 200) {
           const data = await response.json();
           setIsAuthenticated(true);
-          setUserData({ id: data.id, username: data.username });
+          console.log(data);
+          setUserData({ id: data.id, nombre: data.nombre, idEmpresa: data.idEmpresa, nombre_empresa: data.nombre_empresa });
         } else {
           setIsAuthenticated(false);
         }
@@ -42,9 +41,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         setIsLoading(false);
       }
     };
-
+  useEffect(() => {
     checkAuth();
-  }, [router.pathname]);
+  }, []);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated === false && !publicRoutes.includes(router.pathname)) {
@@ -53,13 +52,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // Puedes personalizar esta parte con un spinner si prefieres
+    return <div></div>; // Puedes personalizar esta parte con un spinner si prefieres
   }
 
-  if (publicRoutes.includes(router.pathname) || isAuthenticated === null) {
+  
+  if (publicRoutes.includes(router.pathname)) {
     return (
       <div className={isDarkMode ? 'dark' : ''}>
-        <Component {...pageProps} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+        <Component {...pageProps} isAuthenticated={isAuthenticated} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} checkAuth={checkAuth}/>
       </div>
     );
   }
@@ -72,8 +72,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <div className={isDarkMode ? 'dark' : ''}>
       {/* Renderizamos el NavbarSidebar */}
       <NavbarSidebar
-        isLoggedIn={isAuthenticated} // Autenticación del usuario
-        userName={userData?.username || ''} // Nombre del usuario
+        isLoggedIn={isAuthenticated ?? false} // Autenticación del usuario
+        nombre={userData?.nombre || ''} // Nombre del usuario
+        nombreEmpresa={userData?.nombre_empresa || ''} // Nombre de la empresa
         toggleDarkMode={toggleDarkMode} // Función para cambiar el modo oscuro
         isDarkMode={isDarkMode} // Estado del modo oscuro
       />
@@ -84,6 +85,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           {...pageProps}
           isDarkMode={isDarkMode}
           toggleDarkMode={toggleDarkMode}
+          isAuthenticated={isAuthenticated}
           userData={userData}
         />
       </div>

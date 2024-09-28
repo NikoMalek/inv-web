@@ -84,9 +84,13 @@ export class UserDB {
     console.log('isValidPassword',isValidPassword)
     if (!isValidPassword) { throw new Error(errorMessages.passwordIncorrecta) }
 
-    const { password: _, ...publicUser } = user.toJSON();
-    // const { _id,password: _, ...publicUser } = user
+    const { nombre_empresa } = await EmpresaDB.getEmpresa({ id_empresa: user.id_empresa })
 
+    const { password: _, ...publicUser } = user.toJSON();
+
+    publicUser.nombre_empresa = nombre_empresa;
+    // const { _id,password: _, ...publicUser } = user
+    console.log('publicUser',publicUser)
     return publicUser
 
   }

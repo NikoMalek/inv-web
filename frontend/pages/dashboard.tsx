@@ -5,8 +5,10 @@ import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
 
 interface UserData {
-  username: string;
+  nombre: string;
   id: string; // Asegúrate de que sea un string si el ID es un string
+  nombre_empresa: string;
+  idEmpresa: string;
 }
 
 export default function Welcome({ userData }: { userData: UserData }) {
@@ -47,10 +49,16 @@ export default function Welcome({ userData }: { userData: UserData }) {
           <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-lg dark:border-gray-700 text-center bg-white dark:bg-gray-800">
             <div className="flex flex-col items-center justify-center space-y-5 border-b border-gray-200 px-6 py-8 dark:border-gray-600">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Bienvenido{userData.username ? `, ${userData.username}` : ''}
+                Bienvenido{userData.nombre ? `, ${userData.nombre}` : ''}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 ID del usuario: <span className="font-medium">{userData.id}</span>
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                ID de la empresa: <span className="font-medium">{userData.idEmpresa}</span>
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Nombre de la empresa: <span className="font-medium">{userData.nombre_empresa}</span>
               </p>
               <button
                 onClick={() => router.push('/registro')}

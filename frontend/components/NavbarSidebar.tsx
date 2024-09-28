@@ -4,14 +4,16 @@ import { FaChevronRight, FaChevronLeft, FaUser, FaCog, FaHeadset, FaTachometerAl
 
 interface NavbarSidebarProps {
   isLoggedIn: boolean;
-  userName: string;
+  nombre: string;
+  nombreEmpresa: string;
   toggleDarkMode: () => void;
   isDarkMode: boolean;
 }
 
 const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
   isLoggedIn,
-  userName,
+  nombre,
+  nombreEmpresa,
   toggleDarkMode,
   isDarkMode,
 }) => {
@@ -50,13 +52,13 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
 
           <div className="flex items-center">
             <img src="/img/logo.png" alt="Logo" className="h-10" />
-            <span className="ml-2 font-bold text-xl">Mi Empresa</span>
+            <span className="ml-2 font-bold text-xl">{nombreEmpresa}</span>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
             {isLoggedIn ? (
               <>
-                <span className="text-sm">Hola, {userName}</span>
+                <span className="text-sm">Hola, {nombre}</span>
                 <Link href="/logout" className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
                   <FaSignOutAlt className="mr-1" /> {/* Icono de salida */}
                   <span className="font-medium">Cerrar Sesión</span> {/* Texto más destacado */}

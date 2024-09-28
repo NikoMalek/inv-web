@@ -41,7 +41,7 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body
   try {
     const user = await UserDB.login({ email, password })
-    const token = jwt.sign({ id: user.id_user, username: user.email },SECRET_JWT_KEY, { 
+    const token = jwt.sign({ id: user.id_user, nombre: user.nombre, idEmpresa: user.id_empresa, nombre_empresa: user.nombre_empresa},SECRET_JWT_KEY, { 
       expiresIn: '1h' 
     })
     res
@@ -92,7 +92,9 @@ app.get('/protected', (req, res) => {
   console.log(user)
   res.json({
     id: user.id,
-    username: user.username
+    nombre: user.nombre,
+    idEmpresa: user.idEmpresa,
+    nombre_empresa: user.nombre_empresa
   });
 })
 
