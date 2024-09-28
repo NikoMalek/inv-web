@@ -3,15 +3,15 @@ import sequelize from '../db.js';
 
 
 const Inventario = sequelize.define('Inventario', {
-  ID_INVENTARIO: {
+  id_inventario: {
     type: DataTypes.STRING,
     primaryKey: true,
   },
-  ID_PRODUCTO_BASE: {
+  id_producto_base: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  ID_EMPRESA: {
+  id_empresa: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -27,7 +27,7 @@ const Inventario = sequelize.define('Inventario', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  ID_REPONEDOR: {
+  id_reponedor: {
     type: DataTypes.STRING,
     allowNull: false,
   }

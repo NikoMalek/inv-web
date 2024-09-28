@@ -47,7 +47,7 @@ export class UserDB {
 
 
     // crear empresa
-    const ID_EMPRESA = await EmpresaDB.create({ nombre_empresa, direccion })
+    const id_empresa = await EmpresaDB.create({ nombre_empresa, direccion })
 
     // crear id
     const id = crypto.randomUUID()
@@ -55,12 +55,12 @@ export class UserDB {
     const hashedPassword = await bcrypt.hash(password, 10) // 10 es el número de veces que se va a encriptar la contraseña
 
     await User.create({
-      ID_USER: id,
+      id_user: id,
       nombre,
       apellido,
       rut,
       telefono,
-      ID_EMPRESA,
+      id_empresa,
       email, 
       password: hashedPassword
     });

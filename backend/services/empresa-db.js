@@ -14,7 +14,7 @@ export class EmpresaDB {
     const id_empresa = crypto.randomUUID();
 
     await Empresa.create({
-      ID_EMPRESA: id_empresa,
+      id_empresa,
       nombre_empresa,
       direccion,
     });

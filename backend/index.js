@@ -41,7 +41,7 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body
   try {
     const user = await UserDB.login({ email, password })
-    const token = jwt.sign({ id: user.ID_USER, username: user.email },SECRET_JWT_KEY, { 
+    const token = jwt.sign({ id: user.id_user, username: user.email },SECRET_JWT_KEY, { 
       expiresIn: '1h' 
     })
     res

@@ -5,40 +5,40 @@ import { InventarioDB } from './inventario-db.js';
 
 
 export class ProductDB {
-  static async create ({ nombre , description, imagen, codigoBarras, ID_EMPRESA, precio, cantidad, ultima_actualizacion, ID_REPONEDOR }) {
+  static async create ({ nombre , description, imagen, codigoBarras, id_empresa, precio, cantidad, ultima_actualizacion, id_reponedor }) {
     
-    const product = await Producto_Base.findOne({ where: { CODIGO_BARRA: codigoBarras } });
+    const product = await Producto_Base.findOne({ where: { codigo_barra: codigoBarras } });
     if (product) {
-      await InventarioDB.create({ ID_PRODUCTO_BASE: product.ID_PRODUCTO_BASE, ID_EMPRESA, precio, cantidad, ultima_actualizacion, ID_REPONEDOR });
+      await InventarioDB.create({ id_producto_base: product.id_producto_base, id_empresa, precio, cantidad, ultima_actualizacion, id_reponedor });
       throw new Error(errorMessages.productoYaExiste)
     }
 
     const id = crypto.randomUUID()
 
     await Producto_Base.create({
-      ID_PRODUCTO_BASE: id,
-      NOMBRE_PRODUCTO: nombre,
-      DESCRIPCION_PRODUCTO: description,
-      IMAGEN_PRODUCTO: imagen,
-      CODIGO_BARRA: codigoBarras
+      id_producto_base: id,
+      nombre_producto: nombre,
+      descripcion_producto: description,
+      imagen_producto: imagen,
+      codigo_barra: codigoBarras
     });
 
-    await InventarioDB.create({ ID_PRODUCTO_BASE: id, ID_EMPRESA, precio, cantidad, ultima_actualizacion, ID_REPONEDOR });
+    await InventarioDB.create({ id_producto_base: id, id_empresa, precio, cantidad, ultima_actualizacion, id_reponedor });
     
     return id
 
   }
-  static async get ({ CODIGO_BARRA }) {
+  static async get ({ codigo_barra }) {
 
-    const product = await Producto_Base.findOne({ where: { CODIGO_BARRA } });
+    const product = await Producto_Base.findOne({ where: { codigo_barra } });
     if (!product) { throw new Error(errorMessages.productoNoExiste) }
     
     product.dataValues = {
-      id: product.ID_PRODUCTO_BASE,
-      nombre: product.NOMBRE_PRODUCTO,
-      description: product.DESCRIPCION_PRODUCTO,
-      imagen: product.IMAGEN_PRODUCTO,
-      codigoBarras: product.CODIGO_BARRA
+      id: product.id_producto_base,
+      nombre: product.nombre_producto,
+      description: product.descripcion_producto,
+      imagen: product.imagen_producto,
+      codigoBarras: product.codigo_barra
     }
     return product
 

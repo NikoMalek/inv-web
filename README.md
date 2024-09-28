@@ -6,8 +6,7 @@ Pasos para instalar y configurar el proyecto.
 
 - Node.js
 - npm o yarn
-- MySQL
-- **Recomendado**: [Laragon](https://laragon.org/)
+- [PostgreSQL ](https://www.postgresql.org/download/)(instala también pgAdmin para gestionar la base de datos)
 
 ## Instalación
 
@@ -49,8 +48,10 @@ cd inv-web
     ```
 
 ### Configuración de la Base de Datos
-1. Abre un gestor de base de datos (Laragon incluye una versión de MySQL).
-2. Copia el script de la base de datos que se encuentra en el repositorio y ejecútalo en tu gestor para crear las tablas necesarias.
+1. Abre pgAdmin y conéctate a tu servidor PostgreSQL.
+2. Crea una nueva base de datos llamada `inv-web`.
+3. Copia el script de la base de datos que se encuentra en el repositorio y ejecútalo en pgAdmin para crear las tablas necesarias en la base de datos `inv-web`.
+
 
 ## Estructura del Proyecto
 - `backend/`: Contiene el código del servidor y la configuración de la base de datos.
