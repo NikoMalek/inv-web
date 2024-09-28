@@ -1,17 +1,20 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import type { AppProps } from 'next/app'
-import { useDarkMode } from '../lib/useDarkMode'
-import '../app/globals.css'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import type { AppProps } from 'next/app';
+import { useDarkMode } from '../lib/useDarkMode';
+import '../app/globals.css';
+
+// Importar el NavbarSidebar
+import NavbarSidebar from '../components/NavbarSidebar';
 
 const publicRoutes = ['/', '/login', '/register'];
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState<{ id: string, username: string } | null>(null);
+  const [userData, setUserData] = useState<{ id: string; username: string } | null>(null);
   const router = useRouter();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode } = useDarkMode(); // Hook para modo oscuro
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -30,7 +33,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           const data = await response.json();
           setIsAuthenticated(true);
           setUserData({ id: data.id, username: data.username });
-          
         } else {
           setIsAuthenticated(false);
         }
@@ -51,7 +53,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {
-    return <div></div>;
+    return <div>Loading...</div>; // Puedes personalizar esta parte con un spinner si prefieres
   }
 
   if (publicRoutes.includes(router.pathname) || isAuthenticated === null) {
@@ -68,7 +70,23 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <div className={isDarkMode ? 'dark' : ''}>
-      <Component {...pageProps} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} userData={userData}/>
+      {/* Renderizamos el NavbarSidebar */}
+      <NavbarSidebar
+        isLoggedIn={isAuthenticated} // Autenticación del usuario
+        userName={userData?.username || ''} // Nombre del usuario
+        toggleDarkMode={toggleDarkMode} // Función para cambiar el modo oscuro
+        isDarkMode={isDarkMode} // Estado del modo oscuro
+      />
+
+      {/* Renderizamos el contenido de la página */}
+      <div className="content">
+        <Component
+          {...pageProps}
+          isDarkMode={isDarkMode}
+          toggleDarkMode={toggleDarkMode}
+          userData={userData}
+        />
+      </div>
     </div>
   );
 };

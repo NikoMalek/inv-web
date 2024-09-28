@@ -56,10 +56,10 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
       })
       router.push('/login');
     } catch (error) {
-      console.error('Error registering user:', error.message);
-      const errorMessage = error.message === 'Failed to fetch' 
+      console.error('Error registering user:', (error as Error).message);
+      const errorMessage = (error as Error).message === 'Failed to fetch' 
       ? 'Error de conexión con el servidor' 
-      : error.message;
+      : (error as Error).message;
       MySwal.fire({
         icon: "warning",
         title: "Error",

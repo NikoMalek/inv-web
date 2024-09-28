@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import RegistroProductos from "../components/registroproducto";
 
-
 interface Producto {
   nombre: string;
   codigoBarras: string;
   cantidad: number;
   imagen?: string;
 }
-
-
 
 interface UserData {
   userData: {
@@ -20,11 +17,13 @@ interface UserData {
 const App: React.FC<UserData> = ({ userData }) => {
   const [productos, setProductos] = useState<Producto[]>([]);
 
+  // Función para guardar un nuevo producto
   const guardarProducto = (producto: Producto) => {
-    setProductos([...productos, producto]);
+    setProductos((prevProductos) => [...prevProductos, producto]);
     console.log("Producto guardado:", producto);
   };
 
+  // Función para buscar un producto en la base de datos local
   const buscarProductoLocal = async (codigo: string): Promise<Producto | null> => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/productos/${codigo}`);
@@ -39,6 +38,7 @@ const App: React.FC<UserData> = ({ userData }) => {
     }
   };
 
+  // Función para guardar un producto en la base de datos local
   const guardarProductoLocal = async (producto: Producto): Promise<void> => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/productos`, {
@@ -54,7 +54,7 @@ const App: React.FC<UserData> = ({ userData }) => {
       }
 
       const savedProducto: Producto = await response.json();
-      setProductos([...productos, savedProducto]);
+      setProductos((prevProductos) => [...prevProductos, savedProducto]);
       console.log("Producto guardado en el backend:", savedProducto);
     } catch (error) {
       console.error('Error saving product:', error);
@@ -62,15 +62,17 @@ const App: React.FC<UserData> = ({ userData }) => {
   };
 
   return (
-    <div className=" min-h-screen w-screen  bg-gray-50 dark:bg-gray-900">
-      
-      <RegistroProductos
-        productos={productos}
-        onGuardarProducto={guardarProducto}
-        buscarProductoLocal={buscarProductoLocal}
-        guardarProductoLocal={guardarProductoLocal}
-      />
-      {/* <h3 className="text-black">Hola señor de ID: {userData.id}</h3> */}
+    <div className="min-h-screen w-screen bg-gray-50 dark:bg-gray-900 flex justify-center items-center">
+      <div className="container max-w-4xl mx-auto p-6 mt-12"> {/* Añadido un margen superior para separarlo del navbar */}
+        <RegistroProductos
+          productos={productos}
+          onGuardarProducto={guardarProducto}
+          buscarProductoLocal={buscarProductoLocal}
+          guardarProductoLocal={guardarProductoLocal}
+        />
+        {/* Si necesitas mostrar el ID del usuario, descomenta la línea de abajo */}
+        {/* <h3 className="text-black">Hola señor de ID: {userData.id}</h3> */}
+      </div>
     </div>
   );
 };
