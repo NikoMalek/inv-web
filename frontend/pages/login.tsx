@@ -13,9 +13,10 @@ const MySwal = withReactContent(Swal)
 interface LoginProps {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  checkAuth: () => Promise<void>;
 }
 
-export default function Login({ isDarkMode, toggleDarkMode }: LoginProps) {
+export default function Login({ isDarkMode, toggleDarkMode, checkAuth }: LoginProps) {
   // const {isDarkMode, toggleDarkMode} = useDarkMode();
   const router = useRouter();
 
@@ -42,6 +43,7 @@ export default function Login({ isDarkMode, toggleDarkMode }: LoginProps) {
       const data = await response.json();
       console.log('User logged in with ID:', data.user._id);
       if (response.status === 200) {
+        await checkAuth();
         router.push('/dashboard');
       }
     } catch (error) {
