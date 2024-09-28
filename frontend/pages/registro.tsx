@@ -6,11 +6,16 @@ interface Producto {
   codigoBarras: string;
   cantidad: number;
   imagen?: string;
+  precio: number;
+  ultima_actualizacion: string;
+  id_empresa: string;
+  id_reponedor: string;
 }
 
 interface UserData {
   userData: {
     id: string;
+    idEmpresa: string;
   };
 }
 
@@ -66,9 +71,9 @@ const App: React.FC<UserData> = ({ userData }) => {
       <div className="container max-w-4xl mx-auto p-6 mt-12"> {/* Añadido un margen superior para separarlo del navbar */}
         <RegistroProductos
           productos={productos}
-          onGuardarProducto={guardarProducto}
+          onGuardarProducto={(producto) => guardarProducto({ ...producto, id_empresa: userData.idEmpresa, id_reponedor: userData.id })}
           buscarProductoLocal={buscarProductoLocal}
-          guardarProductoLocal={guardarProductoLocal}
+          guardarProductoLocal={(producto) => guardarProductoLocal({ ...producto, id_empresa: userData.idEmpresa, id_reponedor: userData.id })}
         />
         {/* Si necesitas mostrar el ID del usuario, descomenta la línea de abajo */}
         {/* <h3 className="text-black">Hola señor de ID: {userData.id}</h3> */}

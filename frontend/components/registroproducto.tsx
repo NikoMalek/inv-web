@@ -6,6 +6,13 @@ interface Producto {
   codigoBarras: string;
   cantidad: number;
   imagen?: string;
+  precio: number;
+  ultima_actualizacion: string;
+}
+
+interface UserData{
+  id: string;
+  idEmpresa: string;
 }
 
 interface RegistroProductosProps {
@@ -24,6 +31,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const [nombre, setNombre] = useState<string>("");
   const [codigoBarras, setCodigoBarras] = useState<string>("");
   const [cantidad, setCantidad] = useState<number>(1);
+  const [precio, setPrecio] = useState<number>(0);
   const [imagen, setImagen] = useState<string>("");
   const [usandoCamara, setUsandoCamara] = useState<boolean>(false);
   const webcamRef = useRef<Webcam>(null);
@@ -62,7 +70,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
-      const codigoBarrasDetectado = "3046920022651"; // Simulación
+      const codigoBarrasDetectado = "3017620422003"; // Simulación
       setCodigoBarras(codigoBarrasDetectado);
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
@@ -78,7 +86,8 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const guardarProducto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formRef.current?.checkValidity()) {
-      const nuevoProducto: Producto = { nombre, codigoBarras, cantidad, imagen };
+      const ultima_actualizacion = new Date().toISOString();
+      const nuevoProducto: Producto = { nombre, codigoBarras, cantidad, imagen, precio, ultima_actualizacion };
       await guardarProductoLocal(nuevoProducto);
       onGuardarProducto(nuevoProducto);
       limpiarFormulario();
@@ -92,6 +101,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     setCodigoBarras("");
     setCantidad(1);
     setImagen("");
+    setPrecio(0);
   };
 
   return (
@@ -186,6 +196,33 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
             />
           </div>
         )}
+
+
+
+
+
+        <div className="mb-4">
+          <label
+            htmlFor="precio"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            Precio
+          </label>
+          <input
+            type="number"
+            id="precio"
+            value={precio}
+            onChange={(e) => {
+              const value = e.target.value.slice(0, 9); // Limita a 9 dígitos
+              setPrecio(Number(value));
+            }}
+            maxLength={9}
+            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+          />
+        </div>
+
+
+
 
         <div className="mb-4">
           <label
