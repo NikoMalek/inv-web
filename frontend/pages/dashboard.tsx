@@ -61,7 +61,7 @@ export default function Welcome({ userData }: { userData: UserData }) {
                 Nombre de la empresa: <span className="font-medium">{userData.nombre_empresa}</span>
               </p>
               <button
-                onClick={() => router.push('/registro')}
+                onClick={() => router.push('/registroInventario')}
                 className="p-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
               >
                 Escanear código de barras
