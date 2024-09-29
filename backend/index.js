@@ -9,6 +9,7 @@ import productRouter from './routes/productRoute.js';
 import invetarioRouter from './routes/inventarioRoute.js';
 import { errorMessages } from './errorvalidation.js';
 
+import ProfileRoute from './routes/ProfileRoute.js'; //RUTA DE LA API DE PERFIL DE USUARIO
 
 
 const app = express()
@@ -102,6 +103,7 @@ app.use('/productos', productRouter);
 
 app.use('/inventario', invetarioRouter);
 
+app.use('/api/users', ProfileRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)

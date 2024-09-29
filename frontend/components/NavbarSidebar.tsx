@@ -143,13 +143,13 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
       </div>
 
       {/* Overlay para oscurecer el fondo */}
-      {isSidebarOpen && (
+      {/* {isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-10" 
           onClick={toggleSidebar} 
           aria-label="Cerrar Sidebar"
         ></div>
-      )}
+      )} */}
     </div>
   );
 };
