@@ -130,7 +130,7 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
             { href: "/products", icon: <FaBox />, label: "Productos" },
             { href: "/categories", icon: <FaTags />, label: "Categorías" },
             { href: "/reports", icon: <FaChartLine />, label: "Informes" },
-            { href: "/profile", icon: <FaUser />, label: "Perfil" },
+            { href: "/profile/Profile", icon: <FaUser />, label: "Perfil" },
             { href: "/settings", icon: <FaCog />, label: "Configuraciones" },
             { href: "/support", icon: <FaHeadset />, label: "Soporte" },
           ].map(({ href, icon, label }) => (

@@ -22,7 +22,7 @@ export default function Home({ isAuthenticated }: HomeProps) {
       <header className="absolute top-4 right-4">
         <button
           className="p-2 bg-green-500 text-white hover:bg-green-600 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-full transition-colors"
-          onClick={() => router.push(isAuthenticated ? '/dashboard' : '/login')}
+          onClick={() => router.push(isAuthenticated ? '/dashboard' : '/auth/login')}
         >
           {isAuthenticated ? 'Mi cuenta' : 'Iniciar sesión'}
         </button>

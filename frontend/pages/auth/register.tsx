@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { Form } from '../components/form';
+import { Form } from '../../components/form';
 import { useRouter } from 'next/router';
-import { SubmitButton } from '../components/submit-button';
+import { SubmitButton } from '../../components/submit-button';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -62,7 +62,7 @@ export default function Register({ isDarkMode, toggleDarkMode }: RegisterProps) 
         },
       });
 
-      router.push('/login');
+      router.push('/auth/login');
     } catch (error) {
       const errorMessage = (error as Error).message === 'Failed to fetch'
         ? 'Error de conexión con el servidor'
@@ -102,7 +102,7 @@ export default function Register({ isDarkMode, toggleDarkMode }: RegisterProps) 
           <SubmitButton>Regístrate</SubmitButton>
           <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
             {'¿Ya tienes una cuenta? '}
-            <Link href="/login" className="font-semibold text-blue-600 hover:underline dark:text-blue-400">
+            <Link href="/auth/login" className="font-semibold text-blue-600 hover:underline dark:text-blue-400">
               Inicia sesión
             </Link>
             {' en su lugar.'}

@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { Form } from '../components/form';
-import { SubmitButton } from '../components/submit-button';
+import { Form } from '../../components/form';
+import { SubmitButton } from '../../components/submit-button';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useRouter } from 'next/router';
-import '../app/globals.css';
+import '../../app/globals.css';
 
 const MySwal = withReactContent(Swal);
 
@@ -85,7 +85,7 @@ export default function Login({ isDarkMode, toggleDarkMode, checkAuth }: LoginPr
           <SubmitButton>Iniciar sesión</SubmitButton>
           <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
             {"¿No tienes una cuenta? "}
-            <Link href="/register" className="font-semibold text-blue-600 hover:underline dark:text-blue-400">
+            <Link href="/auth/register" className="font-semibold text-blue-600 hover:underline dark:text-blue-400">
               Regístrate
             </Link>
             {' gratis.'}

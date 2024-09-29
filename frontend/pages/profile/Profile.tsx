@@ -86,11 +86,11 @@ export default function Profile() {
             <span className="text-gray-900 dark:text-white">{userProfile.telefono}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-700 dark:text-gray-300">Empresa:</span>
+            <span className="text-gray-700 dark:text-gray-300">Nombre de la empresa:</span>
             <span className="text-gray-900 dark:text-white">{userProfile.nombre_empresa}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-700 dark:text-gray-300">Dirección:</span>
+            <span className="text-gray-700 dark:text-gray-300">Dirección de la empresa:</span>
             <span className="text-gray-900 dark:text-white">{userProfile.direccion_empresa}</span>
           </div>
         </div>

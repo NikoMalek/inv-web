@@ -7,7 +7,7 @@ import '../app/globals.css';
 // Importar el NavbarSidebar
 import NavbarSidebar from '../components/NavbarSidebar';
 
-const publicRoutes = ['/', '/login', '/register'];
+const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/logout'];
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);

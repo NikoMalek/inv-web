@@ -1,17 +1,18 @@
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import NavbarSidebar from '../components/NavbarSidebar'; // Importamos el NavbarSidebar
 
 const MySwal = withReactContent(Swal);
 
 interface UserData {
   nombre: string;
-  id: string; // Asegúrate de que sea un string si el ID es un string
+  id: string;
   nombre_empresa: string;
   idEmpresa: string;
 }
 
-export default function Welcome({ userData }: { userData: UserData }) {
+export default function Dashboard({ userData, isDarkMode, toggleDarkMode }: { userData: UserData, isDarkMode: boolean, toggleDarkMode: () => void }) {
   const router = useRouter();
 
   async function handleLogout() {
@@ -38,40 +39,69 @@ export default function Welcome({ userData }: { userData: UserData }) {
   }
 
   if (!userData) {
-    return <div></div>; // O mostrar un loading
+    return <div>Cargando...</div>; // O algún tipo de spinner
   }
 
   return (
-    <div className="flex h-screen w-screen">
-      <div className="flex-grow bg-gray-50 dark:bg-gray-900 transition-opacity duration-300">
-        {/* Contenido que se oscurece */}
-        <div className="flex h-screen w-screen items-center justify-center">
-          <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-lg dark:border-gray-700 text-center bg-white dark:bg-gray-800">
-            <div className="flex flex-col items-center justify-center space-y-5 border-b border-gray-200 px-6 py-8 dark:border-gray-600">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Bienvenido{userData.nombre ? `, ${userData.nombre}` : ''}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                ID del usuario: <span className="font-medium">{userData.id}</span>
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                ID de la empresa: <span className="font-medium">{userData.idEmpresa}</span>
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Nombre de la empresa: <span className="font-medium">{userData.nombre_empresa}</span>
+    <div className={`${isDarkMode ? 'dark' : ''} flex h-screen`}>
+      <NavbarSidebar
+        isLoggedIn={true}
+        nombre={userData.nombre}
+        nombreEmpresa={userData.nombre_empresa}
+        toggleDarkMode={toggleDarkMode}
+        isDarkMode={isDarkMode}
+      />
+
+      <div className="flex-grow bg-gray-100 dark:bg-gray-900 p-6 overflow-auto">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-semibold mb-6 text-gray-900 dark:text-white">
+            Bienvenido, {userData.nombre}
+          </h1>
+          <div className="bg-white dark:bg-gray-800 p-6 shadow-md rounded-lg">
+            <h2 className="text-lg font-semibold mb-4">Información del Usuario</h2>
+            <p className="mb-2">Usuario: <span className="font-bold">{userData.nombre}</span></p>
+            <p className="mb-2">ID Empresa: <span className="font-bold">{userData.idEmpresa}</span></p>
+            <p className="mb-2">Nombre de la Empresa: <span className="font-bold">{userData.nombre_empresa}</span></p>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+              <h3 className="text-lg font-bold">Escanear Código de Barras</h3>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                Registra productos rápidamente.
               </p>
               <button
                 onClick={() => router.push('/registroInventario')}
-                className="p-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
               >
-                Escanear código de barras
+                Escanear
               </button>
-              {/* <button
-                onClick={handleLogout}
-                className="mt-4 p-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+            </div>
+
+            <div className="p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+              <h3 className="text-lg font-bold">Ver Productos</h3>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                Administra todos los productos registrados.
+              </p>
+              <button
+                onClick={() => router.push('/products')}
+                className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300"
               >
-                Cerrar sesión
-              </button> */}
+                Ver productos
+              </button>
+            </div>
+
+            <div className="p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+              <h3 className="text-lg font-bold">Informes</h3>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                Consulta estadísticas y reportes.
+              </p>
+              <button
+                onClick={() => router.push('/reports')}
+                className="mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 transition duration-300"
+              >
+                Ver informes
+              </button>
             </div>
           </div>
         </div>
