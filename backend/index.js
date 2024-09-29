@@ -49,7 +49,7 @@ app.post('/login', async (req, res) => {
       .cookie('access_token', token, {
         httpOnly: true, // la cookie no puede ser leída por el frontend
         secure: process.env.NODE_ENV ==='production', // solo se envía en conexiones https cuando es true
-        sameSite: 'none', // la cookie se envía en todas las peticiones
+        // sameSite: 'none', // la cookie se envía en todas las peticiones
         maxAge: 1000 * 60 * 60 // tiempo de vida de la cookie en milisegundos
       })
       .send({ user, token })

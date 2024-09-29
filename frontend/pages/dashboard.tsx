@@ -23,7 +23,7 @@ export default function Dashboard({ userData, isDarkMode, toggleDarkMode }: { us
       });
 
       if (response.status === 200) {
-        router.push('/login');
+        router.push('/auth/login');
       } else {
         throw new Error('No se pudo cerrar sesión');
       }
@@ -44,14 +44,6 @@ export default function Dashboard({ userData, isDarkMode, toggleDarkMode }: { us
 
   return (
     <div className={`${isDarkMode ? 'dark' : ''} flex h-screen`}>
-      <NavbarSidebar
-        isLoggedIn={true}
-        nombre={userData.nombre}
-        nombreEmpresa={userData.nombre_empresa}
-        toggleDarkMode={toggleDarkMode}
-        isDarkMode={isDarkMode}
-      />
-
       <div className="flex-grow bg-gray-100 dark:bg-gray-900 p-6 overflow-auto">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-semibold mb-6 text-gray-900 dark:text-white">
