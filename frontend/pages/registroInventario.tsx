@@ -22,13 +22,11 @@ interface UserData {
 const App: React.FC<UserData> = ({ userData }) => {
   const [productos, setProductos] = useState<Producto[]>([]);
 
-  // Función para guardar un nuevo producto
   const guardarProducto = (producto: Producto) => {
     setProductos((prevProductos) => [...prevProductos, producto]);
     console.log("Producto guardado:", producto);
   };
 
-  // Función para buscar un producto en la base de datos local
   const buscarProductoLocal = async (codigo: string): Promise<Producto | null> => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/productos/${codigo}`);
@@ -43,7 +41,6 @@ const App: React.FC<UserData> = ({ userData }) => {
     }
   };
 
-  // Función para guardar un producto en la base de datos local
   const guardarProductoLocal = async (producto: Producto): Promise<void> => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/productos`, {
@@ -67,16 +64,14 @@ const App: React.FC<UserData> = ({ userData }) => {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gray-50 dark:bg-gray-900 flex justify-center items-center">
-      <div className="container max-w-4xl mx-auto p-6 mt-12"> {/* Añadido un margen superior para separarlo del navbar */}
+    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 flex justify-center items-center overflow-hidden">
+      <div className="container max-w-4xl mx-auto p-6 mt-12">
         <RegistroProductos
           productos={productos}
           onGuardarProducto={(producto) => guardarProducto({ ...producto, id_empresa: userData.idEmpresa, id_reponedor: userData.id })}
           buscarProductoLocal={buscarProductoLocal}
           guardarProductoLocal={(producto) => guardarProductoLocal({ ...producto, id_empresa: userData.idEmpresa, id_reponedor: userData.id })}
         />
-        {/* Si necesitas mostrar el ID del usuario, descomenta la línea de abajo */}
-        {/* <h3 className="text-black">Hola señor de ID: {userData.id}</h3> */}
       </div>
     </div>
   );
