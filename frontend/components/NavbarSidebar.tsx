@@ -59,13 +59,13 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
             {isLoggedIn ? (
               <>
                 <span className="text-sm">Hola, {nombre}</span>
-                <Link href="/logout" className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
+                <Link href="/auth/logout" className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
                   <FaSignOutAlt className="mr-1" /> {/* Icono de salida */}
                   <span className="font-medium">Cerrar Sesión</span> {/* Texto más destacado */}
                 </Link>
               </>
             ) : (
-              <Link href="/login" className="hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">Iniciar Sesión</Link>
+              <Link href="/auth/login" className="hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">Iniciar Sesión</Link>
             )}
             <button 
               onClick={toggleDarkMode} 
@@ -88,12 +88,12 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
         {isMenuOpen && (
           <div className="md:hidden bg-blue-700 dark:bg-gray-800 p-4 space-y-2">
             {isLoggedIn ? (
-              <Link href="/logout" className="flex items-center text-white hover:text-gray-300 dark:hover:text-gray-400">
+              <Link href="/auth/logout" className="flex items-center text-white hover:text-gray-300 dark:hover:text-gray-400">
                 <FaSignOutAlt className="mr-1" />
                 <span className="font-medium">Cerrar Sesión</span>
               </Link>
             ) : (
-              <Link href="/login" className="block text-white hover:text-gray-300 dark:hover:text-gray-400">Iniciar Sesión</Link>
+              <Link href="/auth/login" className="block text-white hover:text-gray-300 dark:hover:text-gray-400">Iniciar Sesión</Link>
             )}
             <button 
               onClick={toggleDarkMode} 

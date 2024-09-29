@@ -27,7 +27,7 @@ const Logout = () => {
             text: 'Has cerrado sesión exitosamente.',
             confirmButtonText: 'Aceptar',
           }).then(() => {
-            router.push('/index'); // Redirige a la página de login después de cerrar sesión
+            router.push('/auth/login'); // Redirige a la página de login después de cerrar sesión
           });
         } catch (error) {
           console.error('Error al cerrar sesión:', error);
