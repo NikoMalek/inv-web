@@ -1,5 +1,5 @@
 -- Primero crear la base de datos
---CREATE DATABASE inv-web;
+--CREATE DATABASE invweb;
 
 -- Despues ejecutar todo el script dentro de la DB
 
