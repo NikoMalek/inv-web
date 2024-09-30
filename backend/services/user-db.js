@@ -95,6 +95,17 @@ export class UserDB {
 
   }
 
-
+  static async getProfile (id) {
+    const user = await User.findOne({ where: { id_user: id } });
+    if (!user) {
+      return null
+    }
+    const {nombre_empresa, direccion} = await EmpresaDB.getEmpresa({ id_empresa: user.id_empresa })
+    console.log('nombre_empresa',nombre_empresa,direccion)	
+    const { password: _, ...publicUser } = user.toJSON();
+    publicUser.nombre_empresa = nombre_empresa;
+    publicUser.direccion = direccion;
+    return publicUser
+  }
 
 }

@@ -9,6 +9,7 @@ import productRouter from './routes/productRoute.js';
 import invetarioRouter from './routes/inventarioRoute.js';
 import { errorMessages } from './errorvalidation.js';
 
+import ProfileRoute from './routes/ProfileRoute.js'; //RUTA DE LA API DE PERFIL DE USUARIO
 
 
 const app = express()
@@ -48,7 +49,7 @@ app.post('/login', async (req, res) => {
       .cookie('access_token', token, {
         httpOnly: true, // la cookie no puede ser leída por el frontend
         secure: process.env.NODE_ENV ==='production', // solo se envía en conexiones https cuando es true
-        sameSite: 'none', // la cookie se envía en todas las peticiones
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // la cookie se envía en todas las peticiones
         maxAge: 1000 * 60 * 60 // tiempo de vida de la cookie en milisegundos
       })
       .send({ user, token })
@@ -102,6 +103,7 @@ app.use('/productos', productRouter);
 
 app.use('/inventario', invetarioRouter);
 
+app.use('/perfil', ProfileRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)

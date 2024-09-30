@@ -1,24 +1,19 @@
-// import { useDarkMode } from '../lib/useDarkMode';
 import Link from 'next/link';
-import { Form } from '../components/form';
+import { Form } from '../../components/form';
 import { useRouter } from 'next/router';
-import { SubmitButton } from '../components/submit-button';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import { SubmitButton } from '../../components/submit-button';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-const MySwal = withReactContent(Swal)
-
+const MySwal = withReactContent(Swal);
 
 interface RegisterProps {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
 
-export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
-  
+export default function Register({ isDarkMode, toggleDarkMode }: RegisterProps) {
   const router = useRouter();
-
-
 
   async function register(formData: FormData) {
     const nombre = formData.get('firstName') as string;
@@ -29,6 +24,21 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
     const direccion = formData.get('address') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+
+    // Validación básica
+    if (!email || !password) {
+      MySwal.fire({
+        icon: 'warning',
+        title: 'Campos incompletos',
+        text: 'Por favor, complete todos los campos obligatorios.',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          popup: isDarkMode ? 'dark' : '',
+        },
+      });
+      return;
+    }
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
         method: 'POST',
@@ -42,41 +52,37 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
         throw new Error(await response.text());
       }
 
-      const data = await response.json();
-      console.log('User registered with ID:', data.id);
       MySwal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Usuario registrado con éxito",
-        confirmButtonText: "Aceptar",
+        icon: 'success',
+        title: 'Registro exitoso',
+        text: 'Usuario registrado correctamente',
+        confirmButtonText: 'Aceptar',
         customClass: {
           popup: isDarkMode ? 'dark' : '',
         },
-        
-      })
-      router.push('/login');
+      });
+
+      router.push('/auth/login');
     } catch (error) {
-      console.error('Error registering user:', (error as Error).message);
-      const errorMessage = (error as Error).message === 'Failed to fetch' 
-      ? 'Error de conexión con el servidor' 
-      : (error as Error).message;
+      const errorMessage = (error as Error).message === 'Failed to fetch'
+        ? 'Error de conexión con el servidor'
+        : (error as Error).message;
+
       MySwal.fire({
-        icon: "warning",
-        title: "Error",
+        icon: 'error',
+        title: 'Error',
         text: errorMessage,
-        confirmButtonText: "Aceptar ",
+        confirmButtonText: 'Aceptar',
         customClass: {
           popup: isDarkMode ? 'dark' : '',
         },
-      })
+      });
     }
   }
 
-
-
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4">
         <button
           onClick={toggleDarkMode}
           className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full"
@@ -84,6 +90,7 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
           {isDarkMode ? '🌞' : '🌜'}
         </button>
       </div>
+
       <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl dark:border-gray-700">
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center dark:bg-gray-800 dark:border-gray-600 sm:px-16">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Regístrate</h3>
@@ -93,10 +100,10 @@ export default function Register({isDarkMode, toggleDarkMode}: RegisterProps) {
         </div>
         <Form action={register} isRegister>
           <SubmitButton>Regístrate</SubmitButton>
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
             {'¿Ya tienes una cuenta? '}
-            <Link href="/login" className="font-semibold text-gray-800 dark:text-gray-200">
-            Inicia sesión
+            <Link href="/auth/login" className="font-semibold text-blue-600 hover:underline dark:text-blue-400">
+              Inicia sesión
             </Link>
             {' en su lugar.'}
           </p>

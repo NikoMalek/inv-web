@@ -5,10 +5,12 @@ export function Form({
   action,
   children,
   isRegister,
+  
 }: {
   action: any;
   children: React.ReactNode;
   isRegister?: boolean;
+  className?: string;  // Agregamos la propiedad className
 }) {
   const [rut, setRut] = useState<string>('');
   const [rutError, setRutError] = useState<string>('');
