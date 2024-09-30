@@ -95,40 +95,17 @@ export class UserDB {
 
   }
 
-   // Nuevo método para obtener el perfil de usuario
-   static async getProfile(userId) {
-    try {
-      // Paso 1: Obtener el usuario
-      const user = await User.findOne({ where: { id_user: userId } });
-      if (!user) {
-        throw new Error(errorMessages.usuarioNoEncontrado);
-      }
-  
-      // Paso 2: Obtener la empresa usando el id_empresa del usuario
-      const empresa = await EmpresaDB.getEmpresa({ id_empresa: user.id_empresa });
-      
-      // Verifica si se encontró la empresa
-      if (!empresa) {
-        throw new Error('Empresa no encontrada');
-      }
-  
-      // Paso 3: Combina los datos del usuario y la empresa
-      const userProfile = {
-        id_user: user.id_user,
-        nombre: user.nombre,
-        apellido: user.apellido,
-        rut: user.rut,
-        telefono: user.telefono,
-        email: user.email,
-        id_empresa: user.id_empresa,
-        nombre_empresa: empresa.nombre_empresa,  
-        direccion_empresa: empresa.direccion,    
-      };
-  
-      return userProfile;
-    } catch (error) {
-      throw new Error(error.message);
+  static async getProfile (id) {
+    const user = await User.findOne({ where: { id_user: id } });
+    if (!user) {
+      return null
     }
+    const {nombre_empresa, direccion} = await EmpresaDB.getEmpresa({ id_empresa: user.id_empresa })
+    console.log('nombre_empresa',nombre_empresa,direccion)	
+    const { password: _, ...publicUser } = user.toJSON();
+    publicUser.nombre_empresa = nombre_empresa;
+    publicUser.direccion = direccion;
+    return publicUser
   }
 
 }

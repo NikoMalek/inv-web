@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaChevronRight, FaChevronLeft, FaUser, FaCog, FaHeadset, FaTachometerAlt, FaBox, FaTags, FaChartLine, FaSignOutAlt, FaSun, FaMoon } from 'react-icons/fa';
+import { useRouter } from "next/router";
+import MySwal from "sweetalert2";
 
 interface NavbarSidebarProps {
   isLoggedIn: boolean;
@@ -23,7 +25,7 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
-
+  const router = useRouter();
   // Toggle para abrir/cerrar sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -31,6 +33,36 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
 
   // Toggle para colapsar/expandir sidebar
   const toggleSidebarCollapse = () => setIsSidebarCollapsed(!isSidebarCollapsed);
+
+  async function handleLogout() {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/logout`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.status === 200) {
+        MySwal.fire({
+          icon: 'success',
+          title: '¡Adiós!',
+          text: 'Has cerrado sesión exitosamente.',
+          confirmButtonText: 'Aceptar',
+        });
+        router.push('/auth/login');
+      } else {
+        throw new Error('No se pudo cerrar sesión');
+      }
+    } catch (error) {
+      console.error('Error logging out:', (error as Error).message);
+      MySwal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo cerrar sesión.',
+        confirmButtonText: 'Aceptar',
+      });
+    }
+  }
+
 
   useEffect(() => {
     // Para asegurar que al cambiar el tamaño de la ventana, se ajuste el sidebar y el navbar
@@ -71,10 +103,10 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
             {isLoggedIn ? (
               <>
                 <span className="text-sm">Hola, {nombre}</span>
-                <Link href="/auth/logout" className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
+                <button onClick={handleLogout} className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
                   <FaSignOutAlt className="mr-1" />
                   <span className="font-medium">Cerrar Sesión</span>
-                </Link>
+                </button>
               </>
             ) : (
               <Link href="/auth/login" className="hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">Iniciar Sesión</Link>

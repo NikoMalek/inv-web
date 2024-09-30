@@ -28,11 +28,15 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   buscarProductoLocal,
   guardarProductoLocal,
 }) => {
-  const [nombre, setNombre] = useState<string>("");
-  const [codigoBarras, setCodigoBarras] = useState<string>("");
-  const [cantidad, setCantidad] = useState<number>(1);
-  const [precio, setPrecio] = useState<number>(0);
-  const [imagen, setImagen] = useState<string>("");
+  const [nuevoProducto, setNuevoProducto] = useState<Producto>({
+    nombre: '',
+    codigoBarras: '',
+    cantidad: 0,
+    imagen: '',
+    precio: 0,
+    ultima_actualizacion: ''
+  })
+  // const [imagen, setImagen] = useState<string>("");
   const [usandoCamara, setUsandoCamara] = useState<boolean>(false);
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -42,9 +46,12 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     try {
       const productoLocal = await buscarProductoLocal(codigo);
       if (productoLocal) {
-        setNombre(productoLocal.nombre);
-        setImagen(productoLocal.imagen || "");
-        setCantidad(1);
+        setNuevoProducto(prevProducto => ({
+          ...prevProducto,
+          nombre: productoLocal.nombre,
+          imagen: productoLocal.imagen || "",
+          cantidad: 1
+        }));
         return;
       }
 
@@ -54,9 +61,12 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
       const data = await response.json();
 
       if (data.status === 1) {
-        setNombre(data.product.product_name || "");
-        setImagen(data.product.image_url || "");
-        setCantidad(1);
+        setNuevoProducto(prevProducto => ({
+          ...prevProducto,
+          nombre: data.product.product_name || "",
+          imagen: data.product.image_url || "",
+          cantidad: 1
+        }));
       } else {
         console.log("Producto no encontrado");
         limpiarFormulario();
@@ -72,7 +82,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
       const codigoBarrasDetectado = "3017620422003"; // Simulación
-      setCodigoBarras(codigoBarrasDetectado);
+      setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
   }, [webcamRef]);
@@ -80,7 +90,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const capturarImagen = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
-      setImagen(imageSrc);
+      setNuevoProducto(prevProducto => ({ ...prevProducto, imagen: imageSrc }));
     }
   };
 
@@ -88,9 +98,9 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     e.preventDefault();
     if (formRef.current?.checkValidity()) {
       const ultima_actualizacion = new Date().toISOString();
-      const nuevoProducto: Producto = { nombre, codigoBarras, cantidad, imagen, precio, ultima_actualizacion };
-      await guardarProductoLocal(nuevoProducto);
-      onGuardarProducto(nuevoProducto);
+      const productoFinal = { ...nuevoProducto, ultima_actualizacion };
+      await guardarProductoLocal(productoFinal);
+      onGuardarProducto(productoFinal);
       limpiarFormulario();
     } else {
       console.log("Formulario inválido");
@@ -98,20 +108,33 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if ((name === 'precio' || name === 'cantidad') && value.length > 9) {
+      return; // No actualizar el estado si excede 10 caracteres
+    }
+    setNuevoProducto(prevProducto => ({ ...prevProducto, [name]: value }))
+  };
+  
+
+
   const limpiarFormulario = () => {
-    setNombre("");
-    setCodigoBarras("");
-    setCantidad(1);
-    setImagen("");
-    setPrecio(0);
+    setNuevoProducto({
+      nombre: '',
+      codigoBarras: '',
+      cantidad: 1,
+      imagen: '',
+      precio: 0,
+      ultima_actualizacion: ''
+    });
   };
 
   return (
-    <div className="min-h-screen p-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen p-4 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
       <div className="container mx-auto max-w-4xl">
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
           <div className="flex flex-row items-center justify-between">
-            <h1 className="text-3xl font-bold">Sistema de Inventario</h1>
+            <h1 className="text-3xl font-bold">Sistema de Inventario</h1>  
           </div>
         </div>
 
@@ -143,8 +166,8 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                       name="nombre"
                       type="text"
                       placeholder="Ej: Camiseta de algodón"
-                      value={nombre}
-                      onChange={(e) => setNombre(e.target.value)}
+                      value={nuevoProducto.nombre}
+                      onChange={handleInputChange}
                       className="w-full p-2 border border-gray-300 rounded-md dark:text-gray-900"
                       required
                     />
@@ -157,9 +180,9 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                         name="codigoBarras"
                         type="text"
                         placeholder="Escanear o ingresar código"
-                        value={codigoBarras}
-                        onChange={(e) => setCodigoBarras(e.target.value)}
-                        className="flex-grow p-2 border border-gray-300 rounded-l-md dark:text-gray-900"
+                        value={nuevoProducto.codigoBarras}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded-l-md dark:text-gray-900"
                         required
                       />
                       <button
@@ -176,17 +199,15 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                     <input
                       id="precio"
                       name="precio"
-                      type="text"
+                      type="number"
+                      inputMode="numeric"
                       placeholder="Ej: 19.99"
-                      value={precio}
-                      onChange={(e) => {
-                        let value = e.target.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
-                        if (value.length > 9) {
-                          value = value.slice(0, 9); // Limita a 9 dígitos
-                        }
-                        setPrecio(value ? Number(value) : 0); // Permite borrar todos los caracteres
-                      }}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      value={nuevoProducto.precio}
+                      onChange={handleInputChange}
+                      min={0}
+                      max={999999999}
+                      maxLength={10}
+                      className="w-full p-2 border border-gray-300 rounded-md dark:text-gray-900"
                       required
                     />
                   </div>
@@ -196,10 +217,13 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                       id="cantidad"
                       name="cantidad"
                       type="number"
+                      inputMode="numeric"
                       placeholder="Ej: 100"
-                      value={cantidad}
-                      onChange={(e) => setCantidad(Number(e.target.value))}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      value={nuevoProducto.cantidad}
+                      onChange={handleInputChange}
+                      min={0}
+                      max={999999999}
+                      className="w-full p-2 border border-gray-300 rounded-md dark:text-gray-900"
                       required
                     />
                   </div>
@@ -212,8 +236,8 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                       screenshotFormat="image/jpeg"
                       className="w-1/2 h-64 border rounded-md shadow-md"
                     />
-                    {imagen && (
-                      <img src={imagen} alt="Producto" className="w-1/2 h-64 object-contain rounded-md shadow-md ml-4" />
+                    {nuevoProducto.imagen && (
+                      <img src={nuevoProducto.imagen} alt="Producto" className="w-1/2 h-64 object-contain rounded-md shadow-md ml-4" />
                     )}
                   </div>
                     <div className="flex space-x-2">

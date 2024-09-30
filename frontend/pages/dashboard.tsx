@@ -41,10 +41,9 @@ export default function Dashboard({ userData, isDarkMode, toggleDarkMode }: { us
   if (!userData) {
     return <div>Cargando...</div>; // O algún tipo de spinner
   }
-
   return (
     <div className={`${isDarkMode ? 'dark' : ''} flex h-screen`}>
-      <div className="flex-grow bg-gray-100 dark:bg-gray-900 p-6 overflow-auto">
+      <div className="flex-grow text-gray-700 bg-gray-100 dark:bg-gray-900 p-6 overflow-auto dark:text-white">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-semibold mb-6 text-gray-900 dark:text-white">
             Bienvenido, {userData.nombre}

@@ -6,7 +6,7 @@ import { UserDB } from '../services/user-db.js';
 const router = express.Router();
 
 // Ruta para obtener el perfil del usuario
-router.get('/profile', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     console.log("Este es la respuesta de Profile Route", req.user);
     // Verifica si req.user existe

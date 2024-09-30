@@ -11,7 +11,7 @@ interface UserProfile {
   rut: string;
   telefono: string;
   nombre_empresa: string;
-  direccion_empresa: string;
+  direccion: string;
   email: string;
   profileImage?: string; // Opción para agregar la imagen de perfil
 }
@@ -24,7 +24,7 @@ export default function Profile() {
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/profile`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/perfil`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -91,7 +91,7 @@ export default function Profile() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-gray-700 dark:text-gray-300">Dirección de la empresa:</span>
-            <span className="text-gray-900 dark:text-white">{userProfile.direccion_empresa}</span>
+            <span className="text-gray-900 dark:text-white">{userProfile.direccion}</span>
           </div>
         </div>
 
