@@ -71,7 +71,7 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
             {isLoggedIn ? (
               <>
                 <span className="text-sm">Hola, {nombre}</span>
-                <Link href="/logout" className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
+                <Link href="/auth/logout" className="flex items-center hover:text-gray-300 dark:hover:text-gray-400 transition duration-200">
                   <FaSignOutAlt className="mr-1" />
                   <span className="font-medium">Cerrar Sesión</span>
                 </Link>
