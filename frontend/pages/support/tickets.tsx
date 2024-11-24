@@ -62,7 +62,7 @@ export default function SupportTickets() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/support/tickets`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,10 +72,12 @@ export default function SupportTickets() {
       });
 
       if (!response.ok) {
+        console.log('Error creating ticket:', response);
         throw new Error('Error al crear el ticket.');
       }
 
       const data = await response.json();
+      console.log('Ticket created:', data);
       setTickets((prev) => [...prev, data]);
       setNewTicket({ asunto: '', descripcion: '' });
       MySwal.fire({
@@ -130,7 +132,7 @@ export default function SupportTickets() {
               id="asunto"
               value={newTicket.asunto}
               onChange={(e) => setNewTicket({ ...newTicket, asunto: e.target.value })}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
               required
             />
           </div>
@@ -140,7 +142,7 @@ export default function SupportTickets() {
               id="descripcion"
               value={newTicket.descripcion}
               onChange={(e) => setNewTicket({ ...newTicket, descripcion: e.target.value })}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="mt-1 block w-full p-2 border border-gray-300 bg-white text-gray-900 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
               rows={4}
               required
             />
