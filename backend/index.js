@@ -8,6 +8,7 @@ import sequelize from './db.js';
 import productRouter from './routes/productRoute.js';
 import invetarioRouter from './routes/inventarioRoute.js';
 import { errorMessages } from './errorvalidation.js';
+import ticketRouter from './routes/ticketRoute.js';
 
 import ProfileRoute from './routes/ProfileRoute.js'; //RUTA DE LA API DE PERFIL DE USUARIO
 
@@ -42,7 +43,7 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body
   try {
     const user = await UserDB.login({ email, password })
-    const token = jwt.sign({ id: user.id_user, nombre: user.nombre, idEmpresa: user.id_empresa, nombre_empresa: user.nombre_empresa},SECRET_JWT_KEY, { 
+    const token = jwt.sign({ id: user.id_user, nombre: user.nombre, apellido: user.apellido, idEmpresa: user.id_empresa, nombre_empresa: user.nombre_empresa, email: user.email }, SECRET_JWT_KEY, { 
       expiresIn: '1h' 
     })
     res
@@ -104,6 +105,8 @@ app.use('/productos', productRouter);
 app.use('/inventario', invetarioRouter);
 
 app.use('/perfil', ProfileRoute);
+
+app.use('/ticket', ticketRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
