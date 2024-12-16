@@ -95,8 +95,7 @@ export class UserDB {
 
   }
 
-  static async getProfile ({id}) {
-    console.log("ID recibido: ", id);
+  static async getProfile (id) {
     const user = await User.findOne({ where: { id_user: id } });
     if (!user) {
       return null

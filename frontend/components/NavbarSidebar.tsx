@@ -140,7 +140,7 @@ const NavbarSidebar: React.FC<NavbarSidebarProps> = ({
             { href: "/reports", icon: <FaChartLine />, label: "Informes" },
             { href: "/profile/Profile", icon: <FaUser />, label: "Perfil" },
             { href: "/settings", icon: <FaCog />, label: "Configuraciones" },
-            { href: "/support/tickets", icon: <FaHeadset />, label: "Soporte" }].map(({ href, icon, label }) => (
+            { href: "/support", icon: <FaHeadset />, label: "Soporte" }].map(({ href, icon, label }) => (
             <Link href={href} className="hover:bg-blue-800 dark:hover:bg-gray-700 p-2 rounded flex items-center transition duration-200" key={label}>
               {icon}
               {!isSidebarCollapsed && <span className="ml-2">{label}</span>}

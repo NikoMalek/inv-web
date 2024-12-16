@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     }
 
     const userId = req.user.id; 
-    const userProfile = await UserDB.getProfile({id: userId}); 
+    const userProfile = await UserDB.getProfile(userId); 
 
     if (!userProfile) {
       return res.status(404).send('Perfil no encontrado');

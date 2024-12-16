@@ -43,18 +43,4 @@ export class ProductDB {
     return product
 
   }
-
-  static async getbyId ({ id_producto_base }) {
-    console.log("EL ID ES: ", id_producto_base);
-    const product = await Producto_Base.findOne({ where: { id_producto_base } });
-    if (!product) { throw new Error(errorMessages.productoNoExiste) }
-
-    return {
-      id: product.id_producto_base,
-      nombre: product.nombre_producto,
-      description: product.descripcion_producto,
-      imagen: product.imagen_producto,
-      codigoBarras: product.codigo_barra
-    }
-  }
 }

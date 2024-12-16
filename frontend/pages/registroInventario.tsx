@@ -63,26 +63,6 @@ const App: React.FC<UserData> = ({ userData }) => {
     }
   };
 
-  const buscarProductosEmpresa = async (): Promise<Producto[]> => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/inventario`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    if (!response.ok) {
-      throw new Error('Error al buscar los productos');
-    }
-    const productosEmpresa: Producto[] = await response.json();
-    return productosEmpresa;
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      return [];
-    }
-  }
-
   return (
     <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 flex justify-center items-center overflow-hidden">
       <div className="container max-w-4xl mx-auto p-6 mt-12">
@@ -91,7 +71,6 @@ const App: React.FC<UserData> = ({ userData }) => {
           onGuardarProducto={(producto) => guardarProducto({ ...producto, id_empresa: userData.idEmpresa, id_reponedor: userData.id })}
           buscarProductoLocal={buscarProductoLocal}
           guardarProductoLocal={(producto) => guardarProductoLocal({ ...producto, id_empresa: userData.idEmpresa, id_reponedor: userData.id })}
-          buscarProductosEmpresa={buscarProductosEmpresa}
         />
       </div>
     </div>

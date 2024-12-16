@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
 
 interface Producto {
@@ -20,7 +20,6 @@ interface RegistroProductosProps {
   onGuardarProducto: (producto: Producto) => void;
   buscarProductoLocal: (codigo: string) => Promise<Producto | null>; // Función para buscar en la base de datos
   guardarProductoLocal: (producto: Producto) => Promise<void>; // Función para guardar en la base de datos
-  buscarProductosEmpresa: () => Promise<Producto[]>; // Función para buscar productos de la empresa
 }
 
 const RegistroProductos: React.FC<RegistroProductosProps> = ({
@@ -28,7 +27,6 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   onGuardarProducto,
   buscarProductoLocal,
   guardarProductoLocal,
-  buscarProductosEmpresa,
 }) => {
   const [nuevoProducto, setNuevoProducto] = useState<Producto>({
     nombre: '',
@@ -43,19 +41,6 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const webcamRef = useRef<Webcam>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [activeTab, setActiveTab] = useState('add')
-  const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
-
-
-  useEffect(() => {
-    const fetchProductos = async () => {
-      if (activeTab === 'list') {
-        const productosEmpresa = await buscarProductosEmpresa();
-        console.log("Productos de la empresa:", productosEmpresa);
-        setProductosEmpresa(productosEmpresa);
-      }
-    };
-    fetchProductos();
-  }, [activeTab]);
 
   const buscarProductoPorCodigo = async (codigo: string) => {
     try {
@@ -96,7 +81,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
-      const codigoBarrasDetectado = "7802920000091"; // Simulación
+      const codigoBarrasDetectado = "3017620422003"; // Simulación
       setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
@@ -131,6 +116,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     setNuevoProducto(prevProducto => ({ ...prevProducto, [name]: value }))
   };
   
+
 
   const limpiarFormulario = () => {
     setNuevoProducto({
@@ -287,7 +273,6 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
           )}
 
           {activeTab === 'list' && (
-            
             <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Lista de Productos</h2>
               <div className="overflow-x-auto">
@@ -302,7 +287,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                     </tr>
                   </thead>
                   <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {productosEmpresa.map((producto) => (
+                    {productos.map((producto) => (
                       <tr key={producto.codigoBarras}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <img src={producto.imagen} alt={producto.nombre} className="w-20 h-20 object-contain rounded-md" />
