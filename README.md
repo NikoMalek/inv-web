@@ -1,23 +1,42 @@
-# Proyecto
+# 📦 Sistema de Gestión de Inventarios
 
-Pasos para instalar y configurar el proyecto.
 
-## Requisitos
+Este proyecto es un sistema de gestión de inventarios que permite a los usuarios administrar productos, empresas y usuarios. La aplicación incluye funcionalidades para registrar productos, gestionar inventarios y generar informes.
+
+## ✨ Features
+
+* 🔐 Registro y autenticación de usuarios
+* 📝 Gestión de productos e inventarios
+* 📊 Generación de informes
+* 🎨Interfaz de usuario amigable
+
+
+## 🛠️ Tecnologías Usadas
+
+* ⚡ Node.js
+* 🚀 Express
+* 🐘 PostgreSQL
+* 🔄 Sequelize
+* ⚛️ React
+* 🔲 Next.js
+* 🎨 Tailwind CSS
+
+## 📋 Requisitos
 
 - Node.js
 - npm o yarn
 - [PostgreSQL ](https://www.postgresql.org/download/)(instala también pgAdmin para gestionar la base de datos)
 
-## Instalación
+## 🚀 Instalación
 
-### Clonar el repositorio
+### 📥 Clonar el repositorio
 
 ```sh
-git clone https://github.com/Guztavo21/inv-web.git
+git clone https://github.com/NikoMalek/inv-web
 cd inv-web
 ```
 
-### Configuración del Backend
+### ⚙️ Configuración del Backend
 1. Navega al directorio del backend:
     ```sh
     cd backend
@@ -32,7 +51,7 @@ cd inv-web
     npm run dev
     ```
 
-### Configuración del Frontend
+### 🎨 Configuración del Frontend
 1. Navega al directorio del frontend:
     ```sh
     cd frontend
@@ -47,13 +66,19 @@ cd inv-web
     npm run dev
     ```
 
-### Configuración de la Base de Datos
+### 🗄️ Configuración de la Base de Datos
 1. Abre pgAdmin y conéctate a tu servidor PostgreSQL.
 2. Crea una nueva base de datos llamada `inv-web`.
 3. Copia el script de la base de datos que se encuentra en el repositorio y ejecútalo en pgAdmin para crear las tablas necesarias en la base de datos `inv-web`.
 
 
-## Estructura del Proyecto
+## 📱 Uso
+* 👤 Registra un nuevo usuario
+* 🔑 Inicia sesión
+* 🎯 Comienza a gestionar productos e inventarios
+
+
+## 📁 Estructura del Proyecto
 - `backend/`: Contiene el código del servidor y la configuración de la base de datos.
   - `.env.example`: Archivo de ejemplo para las variables de entorno del backend.
   - `config.js`: Configuración del servidor.

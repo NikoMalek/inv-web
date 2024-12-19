@@ -3,10 +3,20 @@
 // Inspired by react-hot-toast library
 import * as React from "react"
 
+<<<<<<< Updated upstream
 import type {
   ToastActionElement,
   ToastProps,
 } from "@/components/ui/toast"
+=======
+export interface ToastActionElement extends React.ReactElement {}
+
+export interface ToastProps {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  action?: ToastActionElement
+}
+>>>>>>> Stashed changes
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -16,6 +26,11 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+<<<<<<< Updated upstream
+=======
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+>>>>>>> Stashed changes
 }
 
 const actionTypes = {
