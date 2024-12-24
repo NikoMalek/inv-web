@@ -44,7 +44,11 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const formRef = useRef<HTMLFormElement>(null);
   const [activeTab, setActiveTab] = useState('add')
   const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
-
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editedValues, setEditedValues] = useState({
+    precio: '',
+    cantidad: ''
+  });
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -101,6 +105,42 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
   }, [webcamRef]);
+
+  const handleEdit = (producto: Producto) => {
+    setEditingId(producto.codigoBarras);
+    setEditedValues({
+      precio: producto.precio.toString(),
+      cantidad: producto.cantidad.toString()
+    });
+  };
+  const handleSaveChanges = async (codigoBarras: string) => {
+    try {
+      const producto = productosEmpresa.find((producto) => producto.codigoBarras === codigoBarras);
+      if (!producto) {
+        throw new Error("Producto no encontrado");
+      }
+
+      const updatedProducto = {
+        ...producto,
+        precio: parseFloat(editedValues.precio),
+        cantidad: parseInt(editedValues.cantidad)
+      };
+
+      await guardarProductoLocal(updatedProducto);
+      setProductosEmpresa((prevProductos) => prevProductos.map((producto) => {
+        if (producto.codigoBarras === codigoBarras) {
+          return updatedProducto;
+        }
+        return producto;
+      }));
+      setEditingId(null);
+    } catch (error) {
+      console.error("Error al guardar cambios:", error);
+    }
+  }
+
+
+
 
   const capturarImagen = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
@@ -307,10 +347,49 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                         <td className="px-6 py-4 whitespace-nowrap">
                           <img src={producto.imagen} alt={producto.nombre} className="w-20 h-20 object-contain rounded-md" />
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.nombre}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.codigoBarras}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.precio}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.cantidad}</td>
+                        <td className="px-6 py-4 text-left max-w-[50%] break-words">{producto.nombre}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">{producto.codigoBarras}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          {editingId === producto.codigoBarras ? (
+                            <input
+                              type="number"
+                              value={editedValues.precio}
+                              onChange={(e) => setEditedValues({...editedValues, precio: e.target.value})}
+                              className="w-20 p-1 border rounded dark:text-gray-900"
+                            />
+                          ) : (
+                            producto.precio
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          {editingId === producto.codigoBarras ? (
+                            <input
+                              type="number"
+                              value={editedValues.cantidad}
+                              onChange={(e) => setEditedValues({...editedValues, cantidad: e.target.value})}
+                              className="w-20 p-1 border rounded dark:text-gray-900"
+                            />
+                          ) : (
+                            producto.cantidad
+                          )}
+                        </td>
+                        <td>
+                          {editingId === producto.codigoBarras ? (
+                            <button 
+                              onClick={() => handleSaveChanges(producto.codigoBarras)}
+                              className="p-2 w-8 h-8 flex items-center justify-center bg-green-500 text-white rounded-lg"
+                            >
+                              ✓
+                            </button>
+                          ) : (
+                            <button 
+                              onClick={() => handleEdit(producto)}
+                              className="p-2 w-8 h-8 flex items-center justify-center bg-gray-800 dark:bg-gray-300 rounded-lg"
+                            >
+                              🖊️
+                            </button>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
