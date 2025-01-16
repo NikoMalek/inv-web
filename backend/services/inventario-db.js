@@ -36,7 +36,7 @@ export class InventarioDB {
       cantidad,
       ultima_actualizacion,
       id_reponedor
-    }, { where: { id_producto_base } });
+    }, { where: { id_producto_base, id_empresa} });
 
     return product.ID_INVENTARIO;
   }
