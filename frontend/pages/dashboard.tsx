@@ -75,7 +75,7 @@ export default function Dashboard({ userData, isDarkMode, toggleDarkMode }: { us
                 Administra todos los productos registrados.
               </p>
               <button
-                onClick={() => router.push('/products')}
+                onClick={() => router.push('/inventory/products')}
                 className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300"
               >
                 Ver productos

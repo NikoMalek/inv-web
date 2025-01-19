@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS empresas (
 -- Insertar datos en 'empresas'
 DELETE FROM empresas;
 INSERT INTO empresas (id_empresa, nombre_empresa, direccion) VALUES
-  ('98c815a8-7c6f-4bcd-aa10-63ce4464d7b1', 'a', 'a'),
+  ('98c815a8-7c6f-4bcd-aa10-63ce4464d7b1', 'Tienda Test', 'Osorno, calle test #123'),
   ('c89b9ed3-f78d-4307-bd1a-6dd466d05702', 'Supermercado Super', 'Calle avenida villa, rural s/n');
 
 -- Tabla 'users'

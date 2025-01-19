@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
+import TablaProducto from "./tables/tablaProductos";
 
 interface Producto {
   nombre: string;
@@ -100,7 +101,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
-      const codigoBarrasDetectado = "7802920000091"; // Simulación
+      const codigoBarrasDetectado = "3033710065967"; // Simulación
       setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
@@ -325,76 +326,17 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
               </form>
             </div>
           )}
-
           {activeTab === 'list' && (
-            
             <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Lista de Productos</h2>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Imagen</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Código de Barras</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Precio</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cantidad</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {productosEmpresa.map((producto) => (
-                      <tr key={producto.codigoBarras}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <img src={producto.imagen} alt={producto.nombre} className="w-20 h-20 object-contain rounded-md" />
-                        </td>
-                        <td className="px-6 py-4 text-left max-w-[50%] break-words">{producto.nombre}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">{producto.codigoBarras}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          {editingId === producto.codigoBarras ? (
-                            <input
-                              type="number"
-                              value={editedValues.precio}
-                              onChange={(e) => setEditedValues({...editedValues, precio: e.target.value})}
-                              className="w-20 p-1 border rounded dark:text-gray-900"
-                            />
-                          ) : (
-                            producto.precio
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          {editingId === producto.codigoBarras ? (
-                            <input
-                              type="number"
-                              value={editedValues.cantidad}
-                              onChange={(e) => setEditedValues({...editedValues, cantidad: e.target.value})}
-                              className="w-20 p-1 border rounded dark:text-gray-900"
-                            />
-                          ) : (
-                            producto.cantidad
-                          )}
-                        </td>
-                        <td>
-                          {editingId === producto.codigoBarras ? (
-                            <button 
-                              onClick={() => handleSaveChanges(producto.codigoBarras)}
-                              className="p-2 w-8 h-8 flex items-center justify-center bg-green-500 text-white rounded-lg"
-                            >
-                              ✓
-                            </button>
-                          ) : (
-                            <button 
-                              onClick={() => handleEdit(producto)}
-                              className="p-2 w-8 h-8 flex items-center justify-center bg-gray-800 dark:bg-gray-300 rounded-lg"
-                            >
-                              🖊️
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <TablaProducto
+                productos={productosEmpresa}
+                editingId={editingId}
+                editedValues={editedValues}
+                onEdit={handleEdit}
+                onSave={handleSaveChanges}
+                onEditValues={(values) => setEditedValues({ ...editedValues, ...values })}
+              />
             </div>
           )}
         </div>
