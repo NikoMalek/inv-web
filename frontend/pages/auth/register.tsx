@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { MoonIcon, SunIcon } from "lucide-react"
+import RUT from 'rut-chile'
 
 interface RegisterProps {
   isDarkMode: boolean
@@ -19,6 +20,31 @@ export default function Register({ isDarkMode, toggleDarkMode }: RegisterProps) 
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [rut, setRut] = useState('')
+  const [rutError, setRutError] = useState('')
+
+  const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.toUpperCase()
+    value = value.replace(/[^0-9K]/g, '')
+    
+    if (value.includes('K') && value.indexOf('K') !== value.length - 1) {
+      value = value.replace(/K/g, '')
+    }
+
+    const formattedRut = RUT.format(value, false, true)
+    setRut(formattedRut)
+  }
+
+  const handleRutBlur = () => {
+    if (rut) {
+      const isValid = RUT.validate(rut)
+      setRutError(isValid ? '' : 'Formato de RUT inválido')
+      if (isValid) {
+        console.log('RUT:', RUT.format(rut))
+        setRut(RUT.format(rut, false, true))
+      }
+    }
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -34,6 +60,8 @@ export default function Register({ isDarkMode, toggleDarkMode }: RegisterProps) 
     const direccion = formData.get('address') as string
     const email = formData.get('email') as string
     const password = formData.get('password') as string
+    
+
 
     if (!email || !password) {
       setError('Por favor, complete todos los campos obligatorios.')
@@ -85,35 +113,89 @@ export default function Register({ isDarkMode, toggleDarkMode }: RegisterProps) 
             <div className="grid gap-2">
               <div className="grid gap-1">
                 <Label htmlFor="firstName">Nombre</Label>
-                <Input id="firstName" name="firstName" required />
+                <Input 
+                  id="firstName" 
+                  name="firstName"
+                  placeholder="Juan"
+                  required 
+                  />
               </div>
               <div className="grid gap-1">
                 <Label htmlFor="lastName">Apellido</Label>
-                <Input id="lastName" name="lastName" required />
+                <Input 
+                  id="lastName" 
+                  name="lastName" 
+                  placeholder="Pérez"
+                  required />
               </div>
               <div className="grid gap-1">
-                <Label htmlFor="rut">RUT</Label>
-                <Input id="rut" name="rut" required />
+                <Label htmlFor="rut">RUT (Sin puntos ni guión)</Label>
+                <Input
+                  id="rut"
+                  name="rut"
+                  type="text"
+                  placeholder="123456789"
+                  value={rut}
+                  onChange={handleRutChange}
+                  onBlur={handleRutBlur}
+                  required
+                />
+                {rutError && (
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">{rutError}</p>
+                )}
               </div>
-              <div className="grid gap-1">
+                <div className="grid gap-1">
                 <Label htmlFor="phone">Teléfono</Label>
-                <Input id="phone" name="phone" type="tel" required />
-              </div>
+                <Input 
+                  id="phone" 
+                  name="phone" 
+                  type="tel" 
+                  placeholder="+56912345678"
+                  pattern="[+0-9]*"
+                  required 
+                  onInput={(e) => {
+                    const input = e.target as HTMLInputElement;
+                    input.value = input.value.replace(/[^0-9+]/g, '').slice(0, 15); // Limita a 15 caracteres (ajusta según necesidad)
+                  }}
+                  inputMode='tel'
+                  />
+                </div>
               <div className="grid gap-1">
                 <Label htmlFor="company">Nombre de la empresa</Label>
-                <Input id="company" name="company" required />
+                <Input 
+                  id="company" 
+                  name="company" 
+                  placeholder="Mi Empresa"
+                  required 
+                  />
               </div>
               <div className="grid gap-1">
                 <Label htmlFor="address">Dirección</Label>
-                <Input id="address" name="address" required />
+                <Input 
+                  id="address" 
+                  name="address" 
+                  placeholder="Calle 123"
+                  required 
+                  />
               </div>
               <div className="grid gap-1">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" required />
+                <Input 
+                  id="email" 
+                  name="email" 
+                  type="email" 
+                  placeholder="correo@gmail.com"
+                  required 
+                  />
               </div>
               <div className="grid gap-1">
                 <Label htmlFor="password">Contraseña</Label>
-                <Input id="password" name="password" type="password" required />
+                <Input 
+                  id="password" 
+                  name="password" 
+                  type="password" 
+                  placeholder="********"
+                  required />
               </div>
               <Button disabled={isLoading} type="submit">
                 {isLoading ? 'Registrando...' : 'Registrarse'}
