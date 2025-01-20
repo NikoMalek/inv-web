@@ -12,7 +12,7 @@ interface Producto {
   ultima_actualizacion: string;
 }
 
-const Productos: React.FC<BuscarProductoProps> = () => {
+const Productos: React.FC<Producto> = () => {
   const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editedValues, setEditedValues] = useState({
