@@ -7,8 +7,7 @@ interface Producto {
   imagen?: string;
   precio: number;
   ultima_actualizacion: string;
-  id_empresa: string;
-  id_reponedor: string;
+
 }
 
 export const productosAPI = {
