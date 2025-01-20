@@ -10,7 +10,7 @@ export class ProductDB {
     const product = await Producto_Base.findOne({ where: { codigo_barra: codigoBarras } });
     if (product) {
       await InventarioDB.create({ id_producto_base: product.id_producto_base, id_empresa, precio, cantidad, ultima_actualizacion, id_reponedor });
-      throw new Error(errorMessages.productoYaExiste)
+      return product.id_producto_base;
     }
 
     const id = crypto.randomUUID()

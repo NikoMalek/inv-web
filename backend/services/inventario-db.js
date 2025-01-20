@@ -11,7 +11,7 @@ export class InventarioDB {
 
     const product = await Inventario.findOne({ where: { id_producto_base, id_empresa } });
     if (product) {InventarioDB.update({ id_producto_base, id_empresa, precio, cantidad, ultima_actualizacion, id_reponedor })
-    throw new Error(errorMessages.productoYaExiste);  
+    return product.id_inventario;
     }
 
     await Inventario.create({
