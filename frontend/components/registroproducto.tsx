@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
+import TablaProducto from "./tables/tablaProductos";
 
 interface Producto {
   nombre: string;
@@ -44,7 +45,11 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const formRef = useRef<HTMLFormElement>(null);
   const [activeTab, setActiveTab] = useState('add')
   const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
-
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editedValues, setEditedValues] = useState({
+    precio: '',
+    cantidad: ''
+  });
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -96,11 +101,47 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
-      const codigoBarrasDetectado = "7802920000091"; // Simulación
+      const codigoBarrasDetectado = "3033710065967"; // Simulación
       setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
   }, [webcamRef]);
+
+  const handleEdit = (producto: Producto) => {
+    setEditingId(producto.codigoBarras);
+    setEditedValues({
+      precio: producto.precio.toString(),
+      cantidad: producto.cantidad.toString()
+    });
+  };
+  const handleSaveChanges = async (codigoBarras: string) => {
+    try {
+      const producto = productosEmpresa.find((producto) => producto.codigoBarras === codigoBarras);
+      if (!producto) {
+        throw new Error("Producto no encontrado");
+      }
+
+      const updatedProducto = {
+        ...producto,
+        precio: parseFloat(editedValues.precio),
+        cantidad: parseInt(editedValues.cantidad)
+      };
+
+      await guardarProductoLocal(updatedProducto);
+      setProductosEmpresa((prevProductos) => prevProductos.map((producto) => {
+        if (producto.codigoBarras === codigoBarras) {
+          return updatedProducto;
+        }
+        return producto;
+      }));
+      setEditingId(null);
+    } catch (error) {
+      console.error("Error al guardar cambios:", error);
+    }
+  }
+
+
+
 
   const capturarImagen = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
@@ -285,37 +326,17 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
               </form>
             </div>
           )}
-
           {activeTab === 'list' && (
-            
             <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Lista de Productos</h2>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Imagen</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Código de Barras</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Precio</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cantidad</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {productosEmpresa.map((producto) => (
-                      <tr key={producto.codigoBarras}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <img src={producto.imagen} alt={producto.nombre} className="w-20 h-20 object-contain rounded-md" />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.nombre}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.codigoBarras}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.precio}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{producto.cantidad}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <TablaProducto
+                productos={productosEmpresa}
+                editingId={editingId}
+                editedValues={editedValues}
+                onEdit={handleEdit}
+                onSave={handleSaveChanges}
+                onEditValues={(values) => setEditedValues({ ...editedValues, ...values })}
+              />
             </div>
           )}
         </div>
