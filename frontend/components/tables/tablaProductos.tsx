@@ -1,102 +1,276 @@
-import React from "react";
+import React, { useState } from "react"
+import {
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface Producto {
-  nombre: string;
-  codigoBarras: string;
-  cantidad: number;
-  imagen?: string;
-  precio: number;
-  ultima_actualizacion: string;
+  nombre: string
+  codigoBarras: string
+  cantidad: number
+  imagen?: string
+  precio: number
+  ultima_actualizacion: string
 }
 
-interface TablaProductoProps {
-  productos: Producto[];
-  editingId: string | null;
+interface ProductTableProps {
+  productos: Producto[]
+  editingId: string | null
   editedValues: {
-    precio: string;
-    cantidad: string;
-  };
-  onEdit: (producto: Producto) => void;
-  onSave: (codigoBarras: string) => void;
-  onEditValues: (values: { precio?: string; cantidad?: string }) => void;
+    precio: string
+    cantidad: string
+  }
+  onEdit: (producto: Producto) => void
+  onSave: (codigoBarras: string) => void
+  onEditValues: (values: { precio?: string; cantidad?: string }) => void
 }
 
-const TablaProducto: React.FC<TablaProductoProps> = ({
-  productos,
-  editingId,
-  editedValues,
-  onEdit,
-  onSave,
-  onEditValues,
-}) => {
-  return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-gray-900 dark:text-white">
-        <thead className="bg-gray-50 dark:bg-gray-700">
-          <tr>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">Imagen</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Código de Barras</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Precio</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cantidad</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-20">Editar</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-          {productos?.map((producto) => (
-            <tr key={producto.codigoBarras}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <img src={producto.imagen} alt={producto.nombre} className="w-20 h-20 object-contain rounded-md" />
-              </td>
-              <td className="px-6 py-4 max-w-[50%] break-words text-center">{producto.nombre}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{producto.codigoBarras}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">
-                {editingId === producto.codigoBarras ? (
-                  <input
-                    type="number"
-                    value={editedValues.precio}
-                    onChange={(e) => onEditValues({ precio: e.target.value })}
-                    className="w-20 p-1 border rounded dark:text-gray-900"
-                  />
-                ) : (
-                  producto.precio
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">
-                {editingId === producto.codigoBarras ? (
-                  <input
-                    type="number"
-                    value={editedValues.cantidad}
-                    onChange={(e) => onEditValues({ cantidad: e.target.value })}
-                    className="w-20 p-1 border rounded dark:text-gray-900"
-                  />
-                ) : (
-                  producto.cantidad
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">
-                {editingId === producto.codigoBarras ? (
-                  <button 
-                    onClick={() => onSave(producto.codigoBarras)}
-                    className="p-2 w-8 h-8 flex items-center justify-center bg-green-500 text-white rounded-lg"
-                  >
-                    ✓
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => onEdit(producto)}
-                    className="p-2 w-8 h-8 flex items-center justify-center bg-gray-800 dark:bg-gray-300 rounded-lg"
-                  >
-                    🖊️
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+export function ProductTable({ productos, editingId, editedValues, onEdit, onSave, onEditValues }: ProductTableProps) {
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
-export default TablaProducto;
+  const columns: ColumnDef<Producto>[] = [
+    {
+      accessorKey: "imagen",
+      header: "Imagen",
+      cell: ({ row }) => (
+        <img
+          src={row.getValue("imagen") || "/placeholder.svg"}
+          alt={row.getValue("nombre")}
+          className="w-20 h-20 object-contain rounded-md"
+        />
+      ),
+    },
+    {
+      accessorKey: "nombre",
+      header: ({ column }) => {
+        return (
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Nombre
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div>{row.getValue("nombre")}</div>,
+    },
+    {
+      accessorKey: "codigoBarras",
+      header: "Código de Barras",
+      cell: ({ row }) => <div>{row.getValue("codigoBarras")}</div>,
+    },
+    {
+      accessorKey: "precio",
+      header: ({ column }) => {
+        return (
+          <div className="text-center">
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+              Precio
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        )
+      },
+      cell: ({ row }) => {
+        const producto = row.original
+        return editingId === producto.codigoBarras ? (
+          <div className="flex justify-center">
+            <Input
+              type="number"
+              value={editedValues.precio}
+              onChange={(e) => onEditValues({ precio: e.target.value })}
+              className="w-20"
+            />
+          </div>
+        ) : (
+          <div className="text-center font-medium">{producto.precio}</div>
+        )
+      },
+    },
+    {
+      accessorKey: "cantidad",
+      header: ({ column }) => {
+        return (
+          <div className="text-center">
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+              Cantidad
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        )
+      },
+      cell: ({ row }) => {
+        const producto = row.original
+        return editingId === producto.codigoBarras ? (
+          <div className="flex justify-center">
+            <Input
+              type="number"
+              value={editedValues.cantidad}
+              onChange={(e) => onEditValues({ cantidad: e.target.value })}
+              className="w-20 text-center"
+            />
+          </div>
+        ) : (
+          <div className="text-center font-medium">{producto.cantidad}</div>
+        )
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const producto = row.original
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(producto.codigoBarras)}>
+                Copiar código de barras
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => onEdit(producto)}>Editar</DropdownMenuItem>
+              {editingId === producto.codigoBarras && (
+                <DropdownMenuItem onClick={() => onSave(producto.codigoBarras)}>Guardar</DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+
+  const table = useReactTable({
+    data: productos,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+    },
+  })
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Buscar productos..."
+          value={(table.getColumn("nombre")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("nombre")?.setFilterValue(event.target.value)}
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                )
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  )
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                No hay resultados.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Anterior
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            Siguiente
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
+export default ProductTable
