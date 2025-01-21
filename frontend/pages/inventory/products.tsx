@@ -64,7 +64,7 @@ const Productos: React.FC<Producto> = () => {
   }
 
   return (
-    <div className="bg-gray-50 text-gray-900 dark:text-white dark:bg-gray-900 min-h-screen p-6">
+    <div className="bg-gray-50 text-gray-900 dark:text-white dark:bg-gray-900 min-h-screen p-6 overflow-auto h-screen ">
       <h1 className="text-2xl font-bold mb-4">Productos</h1>
       <TablaProducto
         productos={productosEmpresa}

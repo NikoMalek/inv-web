@@ -84,7 +84,7 @@ const App: React.FC<UserData> = ({ userData }) => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 flex justify-center items-center overflow-hidden">
+    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900 flex flex-col justify-start items-center overflow-auto h-screen ">
       <div className="container max-w-4xl mx-auto p-6 mt-12">
         <RegistroProductos
           productos={productos}
