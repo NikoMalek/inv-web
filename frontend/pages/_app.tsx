@@ -5,6 +5,7 @@ import { useDarkMode } from '../lib/useDarkMode';
 import '../app/globals.css';
 import NavbarSidebar from '../components/NavbarSidebar';
 import { indexedDBService } from '../services/indexedDB';
+import ConnectionAlert from '../components/ConnectionAlert';
 
 const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/forgot-password'];
 
@@ -66,6 +67,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <div className={isDarkMode ? 'dark' : ''}>
+      <ConnectionAlert />
       {/* Renderizamos el NavbarSidebar */}
       <NavbarSidebar
         isLoggedIn={isAuthenticated ?? false}
