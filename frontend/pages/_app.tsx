@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import { useDarkMode } from '../lib/useDarkMode';
 import '../app/globals.css';
 import NavbarSidebar from '../components/NavbarSidebar';
+import { indexedDBService } from '../services/indexedDB';
 
 const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/forgot-password'];
 
@@ -14,6 +15,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);  // Añadir estado para el sidebar
   const router = useRouter();
   const { isDarkMode, toggleDarkMode } = useDarkMode(); 
+
+  useEffect(() => {
+    indexedDBService.initDB().catch(console.error);
+  }, []);
+
 
   const checkAuth = async () => {
     try {

@@ -1,3 +1,5 @@
+import { indexedDBService } from './indexedDB';
+
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Producto {
@@ -58,11 +60,15 @@ export const productosAPI = {
       if (!response.ok) {
         throw new Error('Error al buscar los productos');
       }
+
+      const productos = await response.json();
+      console.log('productos:', productos);
+      await indexedDBService.guardarProductos(productos);
       
-      return await response.json();
+      return productos;
     } catch (error) {
       console.error('Error fetching products:', error);
-      return [];
+      return await indexedDBService.buscarProductos();
     }
   }
 };
