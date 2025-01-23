@@ -40,6 +40,8 @@ export const productosAPI = {
       if (!response.ok) {
         throw new Error('Error al guardar el producto');
       }
+      await indexedDBService.actualizarProducto(producto);
+
       return await response.json();
     } catch (error) {
       console.error('Error saving product:', error);

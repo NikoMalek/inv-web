@@ -14,6 +14,12 @@ const STORE_NAME = 'productos';
 export const indexedDBService = {
   async initDB(): Promise<void> { // Inicializa la base de datos
     return new Promise((resolve, reject) => {
+      // limpiar la base de datos
+      const deleteRequest = indexedDB.deleteDatabase(DB_NAME);
+      
+      deleteRequest.onerror = () => reject(deleteRequest.error);
+      deleteRequest.onsuccess = () => resolve();
+
       const request = indexedDB.open(DB_NAME, DB_VERSION); // Abre la base de datos o la crea si no existe
       
       request.onerror = () => reject(request.error);
@@ -53,6 +59,22 @@ export const indexedDBService = {
       request.onsuccess = () => resolve(request.result);
     });
   },
+  async actualizarProducto(producto: Producto): Promise<void> { // Actualiza un producto en la base de datos
+    const db = await this.getDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite'); // 'readwrite' es el modo de transacción el cual permite leer y escribir en la base de datos
+    const store = tx.objectStore(STORE_NAME); // Obtenemos el almacen de objetos(tabla) de la base de datos
+
+    return new Promise((resolve, reject) => {
+      const request = store.put(producto); // Guarda un producto en la base de datos
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve();
+    });
+
+  },
+
+
+
+
   async getDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);

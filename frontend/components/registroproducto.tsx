@@ -101,7 +101,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
-      const codigoBarrasDetectado = "3033710065967"; // Simulación
+      const codigoBarrasDetectado = "7790272001005"; // Simulación
       setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
