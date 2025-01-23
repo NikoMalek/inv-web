@@ -53,7 +53,7 @@ export default function Login({ isDarkMode, toggleDarkMode, checkAuth }: LoginPr
     } catch (error) {
       console.error('Error logging in:', error)
       const errorMessage = 
-        (error instanceof Error && error.message !== 'El correo electrónico no existe' && error.message !== 'Contraseña Incorrecta') 
+        (error instanceof Error && error.message !== 'El correo electrónico no existe' && error.message !== 'La contraseña es incorrecta') 
           ? 'Error de conexión con el servidor' 
           : (error as Error).message
       
