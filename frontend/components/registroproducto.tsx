@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
 import TablaProducto from "./tables/tablaProductos";
+import BarcodeScanner from "./BarcodeScanner";
 
 interface Producto {
   nombre: string;
@@ -97,11 +98,13 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     }
   };
 
+  // TODO: Revisar que sucederá con esta sección
   const capturarCodigoDesdeCamara = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       console.log("Captura desde cámara: ", imageSrc);
-      const codigoBarrasDetectado = "7790272001005"; // Simulación
+      // const codigoBarrasDetectado = "7790272001005"; // Simulación
+      //const codigoBarrasDetectado = "7802215502286"; // Simulación
       setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
       buscarProductoPorCodigo(codigoBarrasDetectado);
     }
@@ -171,6 +174,15 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     }
     setNuevoProducto(prevProducto => ({ ...prevProducto, [name]: value }))
   };
+
+  // Función para manejar la detección de un código de barras
+  // y buscar el producto en la base de datos o en la API según corresponda
+  // TODO: Implementar la interrupción temporal de la lectura, ya que actualmente
+  //       se sigue leyendo el código de barras aunque ya se haya detectado uno.
+  const handleDetected = (codigo: string) => {
+    setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigo }));
+    buscarProductoPorCodigo(codigo);
+  }
   
 
   const limpiarFormulario = () => {
@@ -286,11 +298,13 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                 {usandoCamara && (
                   <div className="mt-6 space-y-4 col-span-2">
                   <div className="flex space-x-4">
-                    <Webcam
+                    {/* TODO: Eliminar */}
+                    {/* <Webcam
                       ref={webcamRef}
                       screenshotFormat="image/jpeg"
                       className="w-1/2 h-64 border rounded-md shadow-md"
-                    />
+                    /> */}
+                    <BarcodeScanner onDetected={handleDetected} />
                     {nuevoProducto.imagen && (
                       <img src={nuevoProducto.imagen} alt="Producto" className="w-1/2 h-64 object-contain rounded-md shadow-md ml-4" />
                     )}
