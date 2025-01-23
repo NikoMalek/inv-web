@@ -45,6 +45,8 @@ export const productosAPI = {
       return await response.json();
     } catch (error) {
       console.error('Error saving product:', error);
+      await indexedDBService.actualizarProducto(producto); // actualizamos la tabla para mostrar sin conexión
+      await indexedDBService.guardarProductoPendiente(producto); // guardamos el producto pendiente de sincronizar con el backend al encontrar conexión
       return null;
     }
   },
@@ -71,6 +73,14 @@ export const productosAPI = {
     } catch (error) {
       console.error('Error fetching products:', error);
       return await indexedDBService.buscarProductos();
+    }
+  },
+  sincronizarProductosPendientes: async (): Promise<void> => {
+    const productosPendientes = await indexedDBService.buscarProductosPendientes();
+    console.log('Productos pendientes:', productosPendientes);
+    for (const producto of productosPendientes) {
+      await productosAPI.guardarProducto(producto);
+      await indexedDBService.borrarProductoPendiente(producto.codigoBarras);
     }
   }
 };

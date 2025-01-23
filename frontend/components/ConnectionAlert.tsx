@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { productosAPI } from '@/services/productos';
 
 const ConnectionAlert = () => {
   useEffect(() => {
@@ -38,12 +39,13 @@ const ConnectionAlert = () => {
       });
     };
 
-    const handleOnline = () => {
+    const handleOnline = async () => {
       console.log('🟢 Conexión a Internet disponible');
       if (toast) {
         toast.close();
       }
       showOnlineAlert();
+      await productosAPI.sincronizarProductosPendientes();
     };
 
     const handleOffline = () => {
