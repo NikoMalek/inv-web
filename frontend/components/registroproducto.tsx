@@ -99,16 +99,16 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   };
 
   // TODO: Revisar que sucederá con esta sección
-  const capturarCodigoDesdeCamara = useCallback(() => {
-    const imageSrc = webcamRef.current?.getScreenshot();
-    if (imageSrc) {
-      console.log("Captura desde cámara: ", imageSrc);
-      // const codigoBarrasDetectado = "7790272001005"; // Simulación
-      //const codigoBarrasDetectado = "7802215502286"; // Simulación
-      setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
-      buscarProductoPorCodigo(codigoBarrasDetectado);
-    }
-  }, [webcamRef]);
+  // const capturarCodigoDesdeCamara = useCallback(() => {
+  //   const imageSrc = webcamRef.current?.getScreenshot();
+  //   if (imageSrc) {
+  //     console.log("Captura desde cámara: ", imageSrc);
+  //     // const codigoBarrasDetectado = "7790272001005"; // Simulación
+  //     //const codigoBarrasDetectado = "7802215502286"; // Simulación
+  //     setNuevoProducto(prevProducto => ({ ...prevProducto, codigoBarras: codigoBarrasDetectado }));
+  //     buscarProductoPorCodigo(codigoBarrasDetectado);
+  //   }
+  // }, [webcamRef]);
 
   const handleEdit = (producto: Producto) => {
     setEditingId(producto.codigoBarras);
@@ -310,13 +310,13 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
                     )}
                   </div>
                     <div className="flex space-x-2">
-                      <button
+                      {/* <button
                         type="button"
                         onClick={capturarCodigoDesdeCamara}
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                       >
                         Capturar Código
-                      </button>
+                      </button> */}
                       <button
                         type="button"
                         onClick={capturarImagen}
