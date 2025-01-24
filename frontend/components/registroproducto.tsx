@@ -47,6 +47,8 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
   const [activeTab, setActiveTab] = useState('add')
   const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [editedValues, setEditedValues] = useState({
     precio: '',
     cantidad: ''
@@ -345,6 +347,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
               <h2 className="text-2xl font-bold mb-4">Lista de Productos</h2>
               <TablaProducto
                 productos={productosEmpresa}
+                isLoading={isLoading}
                 editingId={editingId}
                 editedValues={editedValues}
                 onEdit={handleEdit}
