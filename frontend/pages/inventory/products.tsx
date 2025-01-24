@@ -14,6 +14,7 @@ interface Producto {
 
 const Productos: React.FC<Producto> = () => {
   const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editedValues, setEditedValues] = useState({
     precio: '',
@@ -22,9 +23,11 @@ const Productos: React.FC<Producto> = () => {
   
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true)
       const productosEmpresa = await productosAPI.buscarProductosEmpresa();
       console.log(productosEmpresa);
       setProductosEmpresa(productosEmpresa);
+      setIsLoading(false);
     }
     fetchData();
   }, []); // Aqui se pone la dependencia para que se ejecute solo una vez
@@ -68,6 +71,7 @@ const Productos: React.FC<Producto> = () => {
       <h1 className="text-2xl font-bold mb-4">Productos</h1>
       <TablaProducto
         productos={productosEmpresa}
+        isLoading={isLoading}
         editingId={editingId}
         editedValues={editedValues}
         onEdit={handleEdit}

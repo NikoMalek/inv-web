@@ -38,6 +38,7 @@ interface Producto {
 
 interface ProductTableProps {
   productos: Producto[]
+  isLoading: boolean
   editingId: string | null
   editedValues: {
     precio: string
@@ -48,26 +49,11 @@ interface ProductTableProps {
   onEditValues: (values: { precio?: string; cantidad?: string }) => void
 }
 
-export function ProductTable({ productos, editingId, editedValues, onEdit, onSave, onEditValues }: ProductTableProps) {
+export function ProductTable({ productos,isLoading, editingId, editedValues, onEdit, onSave, onEditValues }: ProductTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [isLoading, setIsLoading] = useState(true) // Estado de carga necesario 
   
-  
-  /// Nos proporciona el tiempo de desaparición del Skeleton de la Tabla
-  useEffect(() => {
-    // Simula la carga de datos por 1 segundo
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 500)
-
-    return () => clearTimeout(timer) // Limpia el temporizador
-  }, [])
-
-
-
-
   const columns: ColumnDef<Producto>[] = [
     {
       accessorKey: "imagen",
