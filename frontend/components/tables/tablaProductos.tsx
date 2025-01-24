@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, {useEffect , useState } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Skeleton } from "../ui/skeleton" 
 
 interface Producto {
   nombre: string
@@ -51,6 +52,21 @@ export function ProductTable({ productos, editingId, editedValues, onEdit, onSav
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [isLoading, setIsLoading] = useState(true) // Estado de carga necesario 
+  
+  
+  /// Nos proporciona el tiempo de desaparición del Skeleton de la Tabla
+  useEffect(() => {
+    // Simula la carga de datos por 1 segundo
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 500)
+
+    return () => clearTimeout(timer) // Limpia el temporizador
+  }, [])
+
+
+
 
   const columns: ColumnDef<Producto>[] = [
     {
@@ -235,7 +251,18 @@ export function ProductTable({ productos, editingId, editedValues, onEdit, onSav
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? ( // Modificado: muestra el skeleton loader mientras carga
+              Array.from({ length: 3 }).map((_, i) => (
+                <TableRow key={i}>
+                  {/* se añade sombreado a la cantidad de columnas menos 1, por el botón Action */}
+                  {Array.from({ length: columns.length }).map((_, j) => (
+                    <TableCell key={j}>
+                      <Skeleton className="h-6 w-full" /> {/* Añadido: Skeleton loader */}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
