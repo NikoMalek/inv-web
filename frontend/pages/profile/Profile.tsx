@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Loading from './loading'; // Importa el componente Loading
 
 const MySwal = withReactContent(Swal);
 
@@ -52,7 +53,7 @@ export default function Profile() {
   }, []);
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">Cargando...</div>;
+    return <Loading />; // Usa el componente Loading
   }
 
   if (!userProfile) {
