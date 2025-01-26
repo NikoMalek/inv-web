@@ -1,4 +1,4 @@
-import React, {useEffect , useState } from "react"
+import React, { useState } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -19,7 +19,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"

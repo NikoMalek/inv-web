@@ -56,10 +56,12 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
 
   useEffect(() => {
     const fetchProductos = async () => {
+      setIsLoading(true);
       if (activeTab === 'list') {
         const productosEmpresa = await buscarProductosEmpresa();
         console.log("Productos de la empresa:", productosEmpresa);
         setProductosEmpresa(productosEmpresa);
+        setIsLoading(false);
       }
     };
     fetchProductos();
