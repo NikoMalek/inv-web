@@ -5,6 +5,8 @@ interface Producto {
   imagen?: string;
   precio: number;
   ultima_actualizacion: string;
+  id_empresa: string;
+  id_reponedor: string;
 }
 
 const DB_NAME = 'inv-web';

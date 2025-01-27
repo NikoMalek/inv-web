@@ -35,6 +35,7 @@ interface Producto {
   ultima_actualizacion: string
 }
 
+
 interface ProductTableProps {
   productos: Producto[]
   isLoading: boolean

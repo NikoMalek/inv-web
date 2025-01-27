@@ -9,11 +9,13 @@ interface Producto {
   imagen?: string;
   precio: number;
   ultima_actualizacion: string;
-
+  id_empresa: string;
+  id_reponedor: string;
 }
 
 export const productosAPI = {
   buscarProducto: async (codigo: string): Promise<Producto | null> => {
+    console.log('Buscando producto:', codigo);
     try {
       const response = await fetch(`${API_URL}/productos/${codigo}`);
       if (!response.ok) {
@@ -27,6 +29,7 @@ export const productosAPI = {
   },
 
   guardarProducto: async (producto: Producto): Promise<Producto | null> => {
+    console.log('Guardando producto:', producto);
     try {
       const response = await fetch(`${API_URL}/productos`, {
         method: 'POST',
@@ -52,6 +55,7 @@ export const productosAPI = {
   },
 
   buscarProductosEmpresa: async (): Promise<Producto[]> => {
+    console.log('Buscando productos de la empresa');
     try {
       const response = await fetch(`${API_URL}/inventario`, {
         method: 'GET',

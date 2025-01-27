@@ -12,7 +12,14 @@ interface Producto {
   ultima_actualizacion: string;
 }
 
-const Productos: React.FC<Producto> = () => {
+interface UserData {
+  userData: {
+    id: string;
+    idEmpresa: string;
+  };
+}
+
+const Productos: React.FC<UserData> = ({ userData }) => {
   const [productosEmpresa, setProductosEmpresa] = useState<Producto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -50,9 +57,11 @@ const Productos: React.FC<Producto> = () => {
         ...producto,
         precio: parseFloat(editedValues.precio),
         cantidad: parseInt(editedValues.cantidad),
-        ultima_actualizacion: new Date().toISOString()
+        ultima_actualizacion: new Date().toISOString(),
+        id_reponedor: userData.id,
+        id_empresa: userData.idEmpresa
       };
-
+      console.log("Guardando cambios:", updatedProducto);
       await productosAPI.guardarProducto(updatedProducto);
       setProductosEmpresa((prevProductos) => prevProductos.map((producto) => {
         if (producto.codigoBarras === codigoBarras) {

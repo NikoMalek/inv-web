@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
 import TablaProducto from "./tables/tablaProductos";
-import BarcodeScanner from "./BarcodeScanner";
+import BarcodeScanner from "./BarcodeScanner";``
 
 interface Producto {
   nombre: string;
@@ -12,24 +12,16 @@ interface Producto {
   ultima_actualizacion: string;
 }
 
-interface UserData{
-  id: string;
-  idEmpresa: string;
-}
 
 interface RegistroProductosProps {
-  productos: Producto[];
   onGuardarProducto: (producto: Producto) => void;
   buscarProductoLocal: (codigo: string) => Promise<Producto | null>; // Función para buscar en la base de datos
-  guardarProductoLocal: (producto: Producto) => Promise<void>; // Función para guardar en la base de datos
   buscarProductosEmpresa: () => Promise<Producto[]>; // Función para buscar productos de la empresa
 }
 
 const RegistroProductos: React.FC<RegistroProductosProps> = ({
-  productos,
   onGuardarProducto,
   buscarProductoLocal,
-  guardarProductoLocal,
   buscarProductosEmpresa,
 }) => {
   const [nuevoProducto, setNuevoProducto] = useState<Producto>({
@@ -65,7 +57,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
       }
     };
     fetchProductos();
-  }, [activeTab]);
+  }, [activeTab, buscarProductosEmpresa]);
 
   const buscarProductoPorCodigo = async (codigo: string) => {
     try {
@@ -134,7 +126,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
         cantidad: parseInt(editedValues.cantidad)
       };
 
-      await guardarProductoLocal(updatedProducto);
+      await onGuardarProducto(updatedProducto);
       setProductosEmpresa((prevProductos) => prevProductos.map((producto) => {
         if (producto.codigoBarras === codigoBarras) {
           return updatedProducto;
@@ -157,12 +149,11 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
     }
   };
 
-  const guardarProducto = async (e: React.FormEvent) => {
+  const guardarProductoLocal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formRef.current?.checkValidity()) {
       const ultima_actualizacion = new Date().toISOString();
       const productoFinal = { ...nuevoProducto, ultima_actualizacion };
-      await guardarProductoLocal(productoFinal);
       onGuardarProducto(productoFinal);
       limpiarFormulario();
     } else {
@@ -228,7 +219,7 @@ const RegistroProductos: React.FC<RegistroProductosProps> = ({
           {activeTab === 'add' && (
             <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Agregar Nuevo Producto</h2>
-              <form ref={formRef} onSubmit={guardarProducto} noValidate>
+              <form ref={formRef} onSubmit={guardarProductoLocal} noValidate>
                 <div className="grid grid-cols-1 gap-6 mb-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="nombre" className="block text-sm font-medium">Nombre del producto</label>
